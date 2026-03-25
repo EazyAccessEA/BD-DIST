@@ -1,0 +1,104 @@
+/* ============================================
+   PRINT STYLES — QR Card Layout (8 per A4)
+   ============================================ */
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-area, .print-area * {
+    visibility: visible;
+  }
+
+  .print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
+
+/* QR Card Grid — used in generated print page */
+.qr-cards-page {
+  width: 210mm;
+  margin: 0 auto;
+  font-family: "Noto Sans Bengali", "Kalpurush", "Inter", sans-serif;
+}
+
+.qr-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  page-break-inside: avoid;
+}
+
+.qr-card {
+  width: 95mm;
+  height: 62mm;
+  border: 1px dashed #999;
+  padding: 4mm;
+  display: flex;
+  align-items: center;
+  gap: 4mm;
+  page-break-inside: avoid;
+  box-sizing: border-box;
+}
+
+.qr-card-qr {
+  flex-shrink: 0;
+  width: 28mm;
+  height: 28mm;
+}
+
+.qr-card-qr img, .qr-card-qr canvas, .qr-card-qr svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.qr-card-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2mm;
+}
+
+.qr-card-name {
+  font-size: 14pt;
+  font-weight: 700;
+  line-height: 1.2;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.qr-card-id {
+  font-size: 10pt;
+  color: #555;
+  font-family: monospace;
+}
+
+.qr-card-phone {
+  font-size: 10pt;
+  color: #333;
+}
+
+.qr-card-event {
+  font-size: 8pt;
+  color: #777;
+  margin-top: auto;
+}
+
+/* Page break after every 8 cards (4 rows x 2 cols) */
+.qr-cards-grid .qr-card:nth-child(8n+1) {
+  page-break-before: auto;
+}
+
+/* Force page break class */
+.page-break {
+  page-break-after: always;
+  break-after: page;
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
