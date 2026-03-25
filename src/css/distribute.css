@@ -1,0 +1,154 @@
+/* ============================================
+   DISTRIBUTE TAB — Name-Search Distribution
+   ============================================ */
+
+/* Container: list + alphabet sidebar */
+.distribute-container {
+  display: flex;
+  height: calc(100vh - 210px);
+  height: calc(100dvh - 210px);
+  position: relative;
+}
+
+/* Scrollable beneficiary list */
+.distribute-list {
+  flex: 1;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 32px;
+}
+
+/* Sticky letter group header */
+.letter-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: var(--space-sm) var(--space-md);
+  width: 100%;
+}
+
+/* Single beneficiary row */
+.distribute-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  background: var(--surface);
+  padding: 12px var(--space-md);
+  border-bottom: 1px solid var(--border);
+  min-height: 64px;
+}
+
+.distribute-item-collected {
+  background: var(--success-bg);
+  color: var(--text-muted);
+}
+
+.distribute-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.distribute-item-name {
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.distribute-item-meta {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* Give food action button */
+.distribute-give-btn {
+  flex-shrink: 0;
+  min-width: 90px;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--success);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.distribute-give-btn:active {
+  background: #1B5E20;
+}
+
+.distribute-give-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Fixed alphabet sidebar */
+.alphabet-index {
+  position: fixed;
+  right: 0;
+  top: 56px;
+  bottom: 56px;
+  width: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  overflow-y: auto;
+  padding: var(--space-xs) 0;
+}
+
+.alphabet-letter {
+  width: 28px;
+  text-align: center;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--primary);
+  padding: 2px 0;
+  cursor: pointer;
+  position: relative;
+  -webkit-user-select: none;
+  user-select: none;
+  border: none;
+  background: transparent;
+  line-height: 1.4;
+}
+
+/* Ensure minimum touch area */
+.alphabet-letter::before {
+  content: "";
+  position: absolute;
+  inset: -2px -4px;
+}
+
+.alphabet-letter.active {
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+}
+
+/* Responsive: very small screens */
+@media (max-width: 359px) {
+  .alphabet-letter { font-size: 0.5625rem; }
+  .alphabet-index { width: 24px; }
+  .distribute-list { padding-right: 28px; }
+}
+
+/* Responsive: larger screens / tablets */
+@media (min-width: 600px) {
+  .alphabet-index { width: 36px; }
+  .alphabet-letter { width: 36px; font-size: 0.75rem; }
+  .distribute-list { padding-right: 40px; }
+}

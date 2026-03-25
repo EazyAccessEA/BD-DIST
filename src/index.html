@@ -82,7 +82,13 @@
 
         <!-- Action Buttons -->
         <div style="display:flex;flex-direction:column;gap:var(--space-sm);">
-          <button class="btn btn-primary btn-block btn-lg" id="btn-generate-cards">
+          <button class="btn btn-primary btn-block btn-lg" id="btn-generate-checklist">
+            📋 <span data-i18n="setup.generate_checklist">চেকলিস্ট তৈরি করুন</span>
+          </button>
+          <button class="btn btn-outline btn-block" id="btn-generate-tokens">
+            🎫 <span data-i18n="setup.generate_tokens">টোকেন তৈরি করুন</span>
+          </button>
+          <button class="btn btn-outline btn-block" id="btn-generate-cards">
             🎴 <span data-i18n="setup.generate_cards">QR কার্ড তৈরি করুন</span>
           </button>
           <button class="btn btn-outline btn-block" id="btn-add-walkin">
@@ -94,6 +100,53 @@
         </div>
       </div>
 
+    </div>
+
+    <!-- ==================== DISTRIBUTE PANEL ==================== -->
+    <div class="tab-panel" id="panel-distribute">
+
+      <!-- No Data Warning -->
+      <div id="distribute-no-data">
+        <div class="empty-state">
+          <div class="empty-state-icon">📋</div>
+          <div class="empty-state-title" data-i18n="distribute.no_data">প্রথমে সেটআপ ট্যাবে তালিকা আমদানি করুন</div>
+        </div>
+      </div>
+
+      <!-- Distribution Ready -->
+      <div id="distribute-ready" class="hidden">
+
+        <!-- Live Counter -->
+        <div class="card mb-md" style="text-align:center;">
+          <div style="display:flex;justify-content:center;gap:var(--space-xl);flex-wrap:wrap;">
+            <div>
+              <div class="stat-number text-success" id="distribute-stat-collected">0</div>
+              <div class="stat-label" data-i18n="distribute.collected">সংগৃহীত</div>
+            </div>
+            <div>
+              <div class="stat-number text-danger" id="distribute-stat-remaining">0</div>
+              <div class="stat-label" data-i18n="distribute.remaining">বাকি</div>
+            </div>
+          </div>
+          <div class="progress-bar mt-md">
+            <div class="progress-fill" id="distribute-progress-fill" style="width:0%"></div>
+          </div>
+          <div class="text-muted mt-sm" id="distribute-progress-text">0 / 0 (0%)</div>
+        </div>
+
+        <!-- Search -->
+        <div class="mb-md">
+          <input class="input input-search" type="text" id="distribute-search"
+            data-i18n-placeholder="distribute.search" placeholder="নাম বা ID খুঁজুন..." autocomplete="off">
+        </div>
+
+        <!-- Distribution List + Alphabet Index -->
+        <div class="distribute-container">
+          <div class="distribute-list" id="distribute-list"></div>
+          <div class="alphabet-index" id="alphabet-index"></div>
+        </div>
+
+      </div>
     </div>
 
     <!-- ==================== SCAN PANEL ==================== -->
@@ -201,6 +254,19 @@
         </button>
       </div>
 
+      <!-- Data Backup -->
+      <div class="card mb-md">
+        <h3 data-i18n="backup.title">ডেটা ব্যাকআপ</h3>
+        <div style="display:flex;flex-direction:column;gap:var(--space-sm);" class="mt-md">
+          <button class="btn btn-primary btn-block" id="btn-backup-save">
+            💾 <span data-i18n="backup.save">ব্যাকআপ সেভ করুন</span>
+          </button>
+          <button class="btn btn-outline btn-block" id="btn-backup-restore">
+            📥 <span data-i18n="backup.restore">ব্যাকআপ পুনরুদ্ধার</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Collected List -->
       <div class="mb-md">
         <h3 class="mb-sm" data-i18n="reports.collected_list">সংগৃহীত তালিকা</h3>
@@ -219,12 +285,16 @@
   <!-- Bottom Navigation -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="nav-setup" data-tab="setup" aria-label="Setup">
-      <span class="nav-icon">📋</span>
+      <span class="nav-icon">⚙️</span>
       <span data-i18n="nav.setup">সেটআপ</span>
     </button>
-    <button class="nav-item" id="nav-scan" data-tab="scan" aria-label="Scan">
+    <button class="nav-item" id="nav-distribute" data-tab="distribute" aria-label="Distribute">
+      <span class="nav-icon">✅</span>
+      <span data-i18n="nav.distribute">বিতরণ</span>
+    </button>
+    <button class="nav-item" id="nav-scan" data-tab="scan" aria-label="QR Scan">
       <span class="nav-icon">📷</span>
-      <span data-i18n="nav.scan">স্ক্যান</span>
+      <span data-i18n="nav.qr_scan">QR স্ক্যান</span>
     </button>
     <button class="nav-item" id="nav-reports" data-tab="reports" aria-label="Reports">
       <span class="nav-icon">📊</span>

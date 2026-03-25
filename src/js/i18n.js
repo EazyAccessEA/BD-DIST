@@ -27,6 +27,8 @@ const I18N = {
     'setup.review_list':    { en: 'Review List', bn: 'তালিকা দেখুন' },
     'setup.generate_cards': { en: 'Generate QR Cards', bn: 'QR কার্ড তৈরি করুন' },
     'setup.search_list':    { en: 'Search by name...', bn: 'নাম দিয়ে খুঁজুন...' },
+    'setup.generate_checklist': { en: 'Generate Checklist', bn: 'চেকলিস্ট তৈরি করুন' },
+    'setup.generate_tokens':    { en: 'Generate Tokens', bn: 'টোকেন তৈরি করুন' },
     'setup.clear_data':     { en: 'Clear All Data', bn: 'সমস্ত তথ্য মুছুন' },
     'setup.confirm_clear':  { en: 'Are you sure? This will delete all beneficiary data and collection records.', bn: 'আপনি কি নিশ্চিত? এটি সমস্ত সুবিধাভোগীর তথ্য এবং সংগ্রহের রেকর্ড মুছে ফেলবে।' },
     'setup.no_data':        { en: 'No Data Loaded', bn: 'কোনো তথ্য লোড হয়নি' },
@@ -83,6 +85,41 @@ const I18N = {
     'common.success':       { en: 'Success', bn: 'সফল' },
     'common.loading':       { en: 'Loading...', bn: 'লোড হচ্ছে...' },
     'common.of':            { en: 'of', bn: 'এর মধ্যে' },
+
+    // Navigation (extended)
+    'nav.distribute':        { en: 'Distribute', bn: 'বিতরণ' },
+    'nav.qr_scan':           { en: 'QR Scan', bn: 'QR স্ক্যান' },
+
+    // Distribute Tab
+    'distribute.give_food':    { en: 'GIVE FOOD', bn: 'খাবার দিন' },
+    'distribute.confirm_give': { en: 'Give food to this person?', bn: 'এই ব্যক্তিকে খাবার দেবেন?' },
+    'distribute.search':       { en: 'Search name or ID...', bn: 'নাম বা ID খুঁজুন...' },
+    'distribute.collected':    { en: 'Collected', bn: 'সংগৃহীত' },
+    'distribute.remaining':    { en: 'Remaining', bn: 'বাকি' },
+    'distribute.all_done':     { en: 'All distributed!', bn: 'সব বিতরণ সম্পন্ন!' },
+    'distribute.phone_hint':   { en: 'Phone ends', bn: 'ফোন শেষ' },
+    'distribute.given':        { en: 'Given', bn: 'দেওয়া হয়েছে' },
+    'distribute.no_data':      { en: 'Import list in Setup tab first', bn: 'প্রথমে সেটআপ ট্যাবে তালিকা আমদানি করুন' },
+
+    // Backup
+    'backup.title':            { en: 'Data Backup', bn: 'ডেটা ব্যাকআপ' },
+    'backup.save':             { en: 'Save Backup', bn: 'ব্যাকআপ সেভ করুন' },
+    'backup.restore':          { en: 'Restore Backup', bn: 'ব্যাকআপ পুনরুদ্ধার' },
+    'backup.export_success':   { en: 'Backup saved', bn: 'ব্যাকআপ সেভ হয়েছে' },
+    'backup.import_success':   { en: 'Data restored', bn: 'ডেটা পুনরুদ্ধার হয়েছে' },
+    'backup.invalid_file':     { en: 'Invalid backup file', bn: 'অবৈধ ব্যাকআপ ফাইল' },
+    'backup.confirm_restore':  { en: 'This will replace current data. Continue?', bn: 'এটি বর্তমান ডেটা প্রতিস্থাপন করবে। চালিয়ে যাবেন?' },
+
+    // Battery
+    'battery.low_hint':        { en: 'Battery low! Use Distribute tab to save power (no camera)', bn: 'ব্যাটারি কম! ক্যামেরা ছাড়াই বিতরণ ট্যাবে যান' },
+
+    // Print
+    'print.checklist_title':  { en: 'Beneficiary Checklist', bn: 'সুবিধাভোগী চেকলিস্ট' },
+    'print.token_title':      { en: 'Distribution Tokens', bn: 'বিতরণ টোকেন' },
+    'print.instructions':     { en: 'Mark with ✓ when food is given', bn: 'খাবার দেওয়া হলে ✓ চিহ্ন দিন' },
+    'print.page':             { en: 'Page', bn: 'পৃষ্ঠা' },
+    'print.col_name':         { en: 'Name', bn: 'নাম' },
+    'print.col_phone':        { en: 'Phone', bn: 'ফোন' },
 
     // Help
     'help.title':           { en: 'Quick Guide', bn: 'দ্রুত গাইড' },

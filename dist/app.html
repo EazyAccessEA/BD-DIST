@@ -766,6 +766,160 @@ img, svg {
   padding-top: 2px;
 }
 /* ============================================
+   DISTRIBUTE TAB — Name-Search Distribution
+   ============================================ */
+
+/* Container: list + alphabet sidebar */
+.distribute-container {
+  display: flex;
+  height: calc(100vh - 210px);
+  height: calc(100dvh - 210px);
+  position: relative;
+}
+
+/* Scrollable beneficiary list */
+.distribute-list {
+  flex: 1;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 32px;
+}
+
+/* Sticky letter group header */
+.letter-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: var(--space-sm) var(--space-md);
+  width: 100%;
+}
+
+/* Single beneficiary row */
+.distribute-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  background: var(--surface);
+  padding: 12px var(--space-md);
+  border-bottom: 1px solid var(--border);
+  min-height: 64px;
+}
+
+.distribute-item-collected {
+  background: var(--success-bg);
+  color: var(--text-muted);
+}
+
+.distribute-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.distribute-item-name {
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.distribute-item-meta {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* Give food action button */
+.distribute-give-btn {
+  flex-shrink: 0;
+  min-width: 90px;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--success);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.distribute-give-btn:active {
+  background: #1B5E20;
+}
+
+.distribute-give-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Fixed alphabet sidebar */
+.alphabet-index {
+  position: fixed;
+  right: 0;
+  top: 56px;
+  bottom: 56px;
+  width: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  overflow-y: auto;
+  padding: var(--space-xs) 0;
+}
+
+.alphabet-letter {
+  width: 28px;
+  text-align: center;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--primary);
+  padding: 2px 0;
+  cursor: pointer;
+  position: relative;
+  -webkit-user-select: none;
+  user-select: none;
+  border: none;
+  background: transparent;
+  line-height: 1.4;
+}
+
+/* Ensure minimum touch area */
+.alphabet-letter::before {
+  content: "";
+  position: absolute;
+  inset: -2px -4px;
+}
+
+.alphabet-letter.active {
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+}
+
+/* Responsive: very small screens */
+@media (max-width: 359px) {
+  .alphabet-letter { font-size: 0.5625rem; }
+  .alphabet-index { width: 24px; }
+  .distribute-list { padding-right: 28px; }
+}
+
+/* Responsive: larger screens / tablets */
+@media (min-width: 600px) {
+  .alphabet-index { width: 36px; }
+  .alphabet-letter { width: 36px; font-size: 0.75rem; }
+  .distribute-list { padding-right: 40px; }
+}
+/* ============================================
    PRINT STYLES — QR Card Layout (8 per A4)
    ============================================ */
 
@@ -942,7 +1096,13 @@ img, svg {
 
         <!-- Action Buttons -->
         <div style="display:flex;flex-direction:column;gap:var(--space-sm);">
-          <button class="btn btn-primary btn-block btn-lg" id="btn-generate-cards">
+          <button class="btn btn-primary btn-block btn-lg" id="btn-generate-checklist">
+            📋 <span data-i18n="setup.generate_checklist">চেকলিস্ট তৈরি করুন</span>
+          </button>
+          <button class="btn btn-outline btn-block" id="btn-generate-tokens">
+            🎫 <span data-i18n="setup.generate_tokens">টোকেন তৈরি করুন</span>
+          </button>
+          <button class="btn btn-outline btn-block" id="btn-generate-cards">
             🎴 <span data-i18n="setup.generate_cards">QR কার্ড তৈরি করুন</span>
           </button>
           <button class="btn btn-outline btn-block" id="btn-add-walkin">
@@ -954,6 +1114,53 @@ img, svg {
         </div>
       </div>
 
+    </div>
+
+    <!-- ==================== DISTRIBUTE PANEL ==================== -->
+    <div class="tab-panel" id="panel-distribute">
+
+      <!-- No Data Warning -->
+      <div id="distribute-no-data">
+        <div class="empty-state">
+          <div class="empty-state-icon">📋</div>
+          <div class="empty-state-title" data-i18n="distribute.no_data">প্রথমে সেটআপ ট্যাবে তালিকা আমদানি করুন</div>
+        </div>
+      </div>
+
+      <!-- Distribution Ready -->
+      <div id="distribute-ready" class="hidden">
+
+        <!-- Live Counter -->
+        <div class="card mb-md" style="text-align:center;">
+          <div style="display:flex;justify-content:center;gap:var(--space-xl);flex-wrap:wrap;">
+            <div>
+              <div class="stat-number text-success" id="distribute-stat-collected">0</div>
+              <div class="stat-label" data-i18n="distribute.collected">সংগৃহীত</div>
+            </div>
+            <div>
+              <div class="stat-number text-danger" id="distribute-stat-remaining">0</div>
+              <div class="stat-label" data-i18n="distribute.remaining">বাকি</div>
+            </div>
+          </div>
+          <div class="progress-bar mt-md">
+            <div class="progress-fill" id="distribute-progress-fill" style="width:0%"></div>
+          </div>
+          <div class="text-muted mt-sm" id="distribute-progress-text">0 / 0 (0%)</div>
+        </div>
+
+        <!-- Search -->
+        <div class="mb-md">
+          <input class="input input-search" type="text" id="distribute-search"
+            data-i18n-placeholder="distribute.search" placeholder="নাম বা ID খুঁজুন..." autocomplete="off">
+        </div>
+
+        <!-- Distribution List + Alphabet Index -->
+        <div class="distribute-container">
+          <div class="distribute-list" id="distribute-list"></div>
+          <div class="alphabet-index" id="alphabet-index"></div>
+        </div>
+
+      </div>
     </div>
 
     <!-- ==================== SCAN PANEL ==================== -->
@@ -1061,6 +1268,19 @@ img, svg {
         </button>
       </div>
 
+      <!-- Data Backup -->
+      <div class="card mb-md">
+        <h3 data-i18n="backup.title">ডেটা ব্যাকআপ</h3>
+        <div style="display:flex;flex-direction:column;gap:var(--space-sm);" class="mt-md">
+          <button class="btn btn-primary btn-block" id="btn-backup-save">
+            💾 <span data-i18n="backup.save">ব্যাকআপ সেভ করুন</span>
+          </button>
+          <button class="btn btn-outline btn-block" id="btn-backup-restore">
+            📥 <span data-i18n="backup.restore">ব্যাকআপ পুনরুদ্ধার</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Collected List -->
       <div class="mb-md">
         <h3 class="mb-sm" data-i18n="reports.collected_list">সংগৃহীত তালিকা</h3>
@@ -1079,12 +1299,16 @@ img, svg {
   <!-- Bottom Navigation -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="nav-setup" data-tab="setup" aria-label="Setup">
-      <span class="nav-icon">📋</span>
+      <span class="nav-icon">⚙️</span>
       <span data-i18n="nav.setup">সেটআপ</span>
     </button>
-    <button class="nav-item" id="nav-scan" data-tab="scan" aria-label="Scan">
+    <button class="nav-item" id="nav-distribute" data-tab="distribute" aria-label="Distribute">
+      <span class="nav-icon">✅</span>
+      <span data-i18n="nav.distribute">বিতরণ</span>
+    </button>
+    <button class="nav-item" id="nav-scan" data-tab="scan" aria-label="QR Scan">
       <span class="nav-icon">📷</span>
-      <span data-i18n="nav.scan">স্ক্যান</span>
+      <span data-i18n="nav.qr_scan">QR স্ক্যান</span>
     </button>
     <button class="nav-item" id="nav-reports" data-tab="reports" aria-label="Reports">
       <span class="nav-icon">📊</span>
@@ -1139,6 +1363,8 @@ const I18N = {
     'setup.review_list':    { en: 'Review List', bn: 'তালিকা দেখুন' },
     'setup.generate_cards': { en: 'Generate QR Cards', bn: 'QR কার্ড তৈরি করুন' },
     'setup.search_list':    { en: 'Search by name...', bn: 'নাম দিয়ে খুঁজুন...' },
+    'setup.generate_checklist': { en: 'Generate Checklist', bn: 'চেকলিস্ট তৈরি করুন' },
+    'setup.generate_tokens':    { en: 'Generate Tokens', bn: 'টোকেন তৈরি করুন' },
     'setup.clear_data':     { en: 'Clear All Data', bn: 'সমস্ত তথ্য মুছুন' },
     'setup.confirm_clear':  { en: 'Are you sure? This will delete all beneficiary data and collection records.', bn: 'আপনি কি নিশ্চিত? এটি সমস্ত সুবিধাভোগীর তথ্য এবং সংগ্রহের রেকর্ড মুছে ফেলবে।' },
     'setup.no_data':        { en: 'No Data Loaded', bn: 'কোনো তথ্য লোড হয়নি' },
@@ -1195,6 +1421,41 @@ const I18N = {
     'common.success':       { en: 'Success', bn: 'সফল' },
     'common.loading':       { en: 'Loading...', bn: 'লোড হচ্ছে...' },
     'common.of':            { en: 'of', bn: 'এর মধ্যে' },
+
+    // Navigation (extended)
+    'nav.distribute':        { en: 'Distribute', bn: 'বিতরণ' },
+    'nav.qr_scan':           { en: 'QR Scan', bn: 'QR স্ক্যান' },
+
+    // Distribute Tab
+    'distribute.give_food':    { en: 'GIVE FOOD', bn: 'খাবার দিন' },
+    'distribute.confirm_give': { en: 'Give food to this person?', bn: 'এই ব্যক্তিকে খাবার দেবেন?' },
+    'distribute.search':       { en: 'Search name or ID...', bn: 'নাম বা ID খুঁজুন...' },
+    'distribute.collected':    { en: 'Collected', bn: 'সংগৃহীত' },
+    'distribute.remaining':    { en: 'Remaining', bn: 'বাকি' },
+    'distribute.all_done':     { en: 'All distributed!', bn: 'সব বিতরণ সম্পন্ন!' },
+    'distribute.phone_hint':   { en: 'Phone ends', bn: 'ফোন শেষ' },
+    'distribute.given':        { en: 'Given', bn: 'দেওয়া হয়েছে' },
+    'distribute.no_data':      { en: 'Import list in Setup tab first', bn: 'প্রথমে সেটআপ ট্যাবে তালিকা আমদানি করুন' },
+
+    // Backup
+    'backup.title':            { en: 'Data Backup', bn: 'ডেটা ব্যাকআপ' },
+    'backup.save':             { en: 'Save Backup', bn: 'ব্যাকআপ সেভ করুন' },
+    'backup.restore':          { en: 'Restore Backup', bn: 'ব্যাকআপ পুনরুদ্ধার' },
+    'backup.export_success':   { en: 'Backup saved', bn: 'ব্যাকআপ সেভ হয়েছে' },
+    'backup.import_success':   { en: 'Data restored', bn: 'ডেটা পুনরুদ্ধার হয়েছে' },
+    'backup.invalid_file':     { en: 'Invalid backup file', bn: 'অবৈধ ব্যাকআপ ফাইল' },
+    'backup.confirm_restore':  { en: 'This will replace current data. Continue?', bn: 'এটি বর্তমান ডেটা প্রতিস্থাপন করবে। চালিয়ে যাবেন?' },
+
+    // Battery
+    'battery.low_hint':        { en: 'Battery low! Use Distribute tab to save power (no camera)', bn: 'ব্যাটারি কম! ক্যামেরা ছাড়াই বিতরণ ট্যাবে যান' },
+
+    // Print
+    'print.checklist_title':  { en: 'Beneficiary Checklist', bn: 'সুবিধাভোগী চেকলিস্ট' },
+    'print.token_title':      { en: 'Distribution Tokens', bn: 'বিতরণ টোকেন' },
+    'print.instructions':     { en: 'Mark with ✓ when food is given', bn: 'খাবার দেওয়া হলে ✓ চিহ্ন দিন' },
+    'print.page':             { en: 'Page', bn: 'পৃষ্ঠা' },
+    'print.col_name':         { en: 'Name', bn: 'নাম' },
+    'print.col_phone':        { en: 'Phone', bn: 'ফোন' },
 
     // Help
     'help.title':           { en: 'Quick Guide', bn: 'দ্রুত গাইড' },
@@ -2054,6 +2315,647 @@ const Search = {
   },
 };
 /* ============================================
+   DISTRIBUTE — Name-Search Distribution Mode
+   ============================================ */
+
+const Distribute = {
+  _debounceTimer: null,
+  _allBeneficiaries: [],
+
+  init() {
+    const searchInput = document.getElementById('distribute-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        this._debounce(() => this._filterList(e.target.value), 300);
+      });
+    }
+
+    const alphabet = document.getElementById('alphabet-index');
+    if (alphabet) {
+      alphabet.addEventListener('click', (e) => {
+        const letter = e.target.closest('.alphabet-letter');
+        if (!letter) return;
+        const target = letter.dataset.letter;
+        const header = document.querySelector(
+          `.letter-header[data-letter="${target}"]`
+        );
+        if (header) header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+  },
+
+  refresh() {
+    this._allBeneficiaries = DataManager.getBeneficiaries();
+    this._allBeneficiaries.sort((a, b) => a.name.localeCompare(b.name, 'bn'));
+    this._updateCounters();
+    this._buildAlphabet(this._allBeneficiaries);
+    this._renderList(this._allBeneficiaries);
+  },
+
+  // --- Private helpers ---
+
+  _debounce(fn, delay) {
+    clearTimeout(this._debounceTimer);
+    this._debounceTimer = setTimeout(fn, delay);
+  },
+
+  _filterList(query) {
+    const q = query.toLowerCase().trim();
+    if (!q) {
+      this._buildAlphabet(this._allBeneficiaries);
+      this._renderList(this._allBeneficiaries);
+      return;
+    }
+    const filtered = this._allBeneficiaries.filter(b =>
+      b.name.toLowerCase().includes(q) ||
+      b.id.toLowerCase().includes(q) ||
+      b.phone_last4.includes(q)
+    );
+    this._buildAlphabet(filtered);
+    this._renderList(filtered);
+  },
+
+  _updateCounters() {
+    const stats = DataManager.getStats();
+    const collected = document.getElementById('distribute-stat-collected');
+    const remaining = document.getElementById('distribute-stat-remaining');
+    const progressFill = document.getElementById('distribute-progress-fill');
+    const progressText = document.getElementById('distribute-progress-text');
+
+    if (collected) collected.textContent = stats.collected;
+    if (remaining) remaining.textContent = stats.remaining;
+    if (progressFill) progressFill.style.width = stats.percent + '%';
+    if (progressText) {
+      progressText.textContent = stats.total > 0
+        ? `${stats.collected} / ${stats.total} (${stats.percent}%)`
+        : '';
+    }
+
+    if (stats.total > 0 && stats.remaining === 0) {
+      UI.toastSuccess(I18N.t('distribute.all_done'));
+    }
+  },
+
+  _getFirstChar(name) {
+    if (!name) return '#';
+    const ch = name.charAt(0).toUpperCase();
+    if (/[A-Z]/.test(ch)) return ch;
+    // Return the Bengali (or other script) character as-is
+    return ch;
+  },
+
+  _groupByLetter(list) {
+    const groups = {};
+    list.forEach(b => {
+      const letter = this._getFirstChar(b.name);
+      if (!groups[letter]) groups[letter] = [];
+      groups[letter].push(b);
+    });
+    return groups;
+  },
+
+  _buildAlphabet(list) {
+    const container = document.getElementById('alphabet-index');
+    if (!container) return;
+
+    const groups = this._groupByLetter(list);
+    const letters = Object.keys(groups).sort((a, b) => a.localeCompare(b, 'bn'));
+
+    container.innerHTML = letters.map(letter =>
+      `<button class="alphabet-letter" data-letter="${this._esc(letter)}">${this._esc(letter)}</button>`
+    ).join('');
+  },
+
+  _renderList(list) {
+    const container = document.getElementById('distribute-list');
+    if (!container) return;
+
+    if (!list.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">📋</div>
+          <div class="empty-state-title">${I18N.t('distribute.search')}</div>
+        </div>`;
+      return;
+    }
+
+    const groups = this._groupByLetter(list);
+    const letters = Object.keys(groups).sort((a, b) => a.localeCompare(b, 'bn'));
+    let html = '';
+
+    letters.forEach(letter => {
+      html += `<div class="letter-header" data-letter="${this._esc(letter)}">${this._esc(letter)}</div>`;
+      groups[letter].forEach(b => {
+        const isCollected = b.collected;
+        const itemCls = 'distribute-item' + (isCollected ? ' distribute-item-collected' : '');
+        const timeStr = b.collected_at
+          ? new Date(b.collected_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          : '';
+
+        html += `<div class="${itemCls}" data-id="${b.id}">`;
+        html += `  <div class="distribute-item-info">`;
+        html += `    <div class="distribute-item-name">${this._esc(b.name)}</div>`;
+        html += `    <div class="distribute-item-meta">${b.id} · ${I18N.t('distribute.phone_hint')}: **${b.phone_last4}</div>`;
+        html += `  </div>`;
+
+        if (isCollected) {
+          html += `<span class="badge badge-success">✓ ${I18N.t('distribute.given')} ${timeStr}</span>`;
+        } else {
+          html += `<button class="distribute-give-btn" data-give-id="${b.id}">${I18N.t('distribute.give_food')}</button>`;
+        }
+
+        html += `</div>`;
+      });
+    });
+
+    container.innerHTML = html;
+    this._bindGiveButtons();
+  },
+
+  _bindGiveButtons() {
+    document.querySelectorAll('[data-give-id]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = e.currentTarget.dataset.giveId;
+        this._showConfirmation(id);
+      });
+    });
+  },
+
+  _showConfirmation(id) {
+    const person = DataManager.findById(id);
+    if (!person) return;
+
+    if (person.collected) {
+      UI.toastWarning(I18N.t('scan.already'));
+      return;
+    }
+
+    const bodyHtml = `
+      <div style="text-align:center;padding:8px 0;">
+        <div style="font-size:1.25rem;font-weight:700;margin-bottom:8px;">${this._esc(person.name)}</div>
+        <div style="color:var(--text-muted);margin-bottom:4px;">ID: ${person.id}</div>
+        <div style="color:var(--text-muted);">${I18N.t('distribute.phone_hint')}: **${person.phone_last4}</div>
+      </div>
+    `;
+
+    UI.showModal(
+      I18N.t('distribute.confirm_give'),
+      bodyHtml,
+      [
+        {
+          label: I18N.t('common.cancel'),
+          cls: 'btn-ghost',
+          onClick: () => UI.closeModal()
+        },
+        {
+          label: I18N.t('distribute.give_food'),
+          cls: 'btn-success',
+          onClick: () => {
+            UI.closeModal();
+            this._confirmGive(id);
+          }
+        }
+      ]
+    );
+  },
+
+  _confirmGive(id) {
+    const result = DataManager.markCollected(id);
+    if (!result) {
+      UI.toastError('Person not found');
+      return;
+    }
+    if (result.alreadyCollected) {
+      UI.toastWarning(I18N.t('scan.already'));
+      return;
+    }
+
+    UI.toastSuccess('✓ ' + result.person.name);
+    this._allBeneficiaries = DataManager.getBeneficiaries();
+    this._allBeneficiaries.sort((a, b) => a.name.localeCompare(b.name, 'bn'));
+    this._updateCounters();
+    Stats.update();
+
+    // Update the single item in-place instead of full re-render
+    this._updateItemInPlace(id, result.person);
+  },
+
+  _updateItemInPlace(id, person) {
+    const item = document.querySelector(`.distribute-item[data-id="${id}"]`);
+    if (!item) return;
+
+    item.classList.add('distribute-item-collected');
+    const timeStr = person.collected_at
+      ? new Date(person.collected_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      : '';
+
+    const btn = item.querySelector('[data-give-id]');
+    if (btn) {
+      const badge = document.createElement('span');
+      badge.className = 'badge badge-success';
+      badge.textContent = '✓ ' + I18N.t('distribute.given') + ' ' + timeStr;
+      btn.replaceWith(badge);
+    }
+  },
+
+  _esc(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  },
+};
+/* ============================================
+   PRINT GENERATOR — Checklist & Token Slips
+   ============================================ */
+
+const PrintGenerator = {
+
+  // --- Paper Checklist ---
+
+  generateChecklist(beneficiaries, meta) {
+    const eventLabel = meta?.event_name || 'Food Distribution';
+    const eventDate = meta?.event_date || '';
+    const sorted = [...beneficiaries].sort((a, b) => a.name.localeCompare(b.name));
+    const rowsPerPage = 40;
+    const totalPages = Math.ceil(sorted.length / rowsPerPage) || 1;
+
+    let html = this._checklistHeader(eventLabel, eventDate, totalPages);
+
+    for (let i = 0; i < sorted.length; i++) {
+      const pageNum = Math.floor(i / rowsPerPage) + 1;
+
+      if (i % rowsPerPage === 0) {
+        if (i > 0) {
+          html += '</tbody></table>';
+          html += '</div>'; // close .checklist-page
+        }
+        html += `<div class="checklist-page">`;
+        html += this._checklistPageHeader(eventLabel, eventDate, pageNum, totalPages, i === 0);
+        html += `<table class="checklist-table">
+          <thead><tr>
+            <th class="chk-col">☐</th>
+            <th class="num-col">#</th>
+            <th class="name-col">${I18N.t('print.col_name') || 'Name'}</th>
+            <th class="id-col">ID</th>
+            <th class="phone-col">${I18N.t('print.col_phone') || 'Phone'}</th>
+          </tr></thead><tbody>`;
+      }
+
+      const b = sorted[i];
+      html += `<tr>
+        <td class="chk-col">☐</td>
+        <td class="num-col">${i + 1}</td>
+        <td class="name-col">${this._esc(b.name)}</td>
+        <td class="id-col">${b.id}</td>
+        <td class="phone-col">**${b.phone_last4}</td>
+      </tr>`;
+    }
+
+    if (sorted.length > 0) {
+      html += '</tbody></table></div>';
+    }
+
+    html += this._pageFooter();
+    return html;
+  },
+
+  openChecklist(beneficiaries, meta) {
+    const html = this.generateChecklist(beneficiaries, meta);
+    this._openOrDownload(html, 'checklist.html');
+  },
+
+  // --- Token Slips ---
+
+  generateTokenSlips(beneficiaries, meta) {
+    const eventLabel = meta?.event_name || 'Food Distribution';
+    const sorted = [...beneficiaries].sort((a, b) => a.name.localeCompare(b.name));
+    const slipsPerPage = 20; // 4 cols × 5 rows
+
+    let html = this._tokenHeader(eventLabel);
+
+    for (let i = 0; i < sorted.length; i++) {
+      if (i % slipsPerPage === 0) {
+        if (i > 0) {
+          html += '</div>'; // close .token-grid
+          html += '</div>'; // close .token-page
+        }
+        html += '<div class="token-page"><div class="token-grid">';
+      }
+
+      const b = sorted[i];
+      html += `<div class="token-slip">
+        <div class="token-id">${b.id}</div>
+        <div class="token-name">${this._esc(b.name)}</div>
+        <div class="token-event">${this._esc(eventLabel)}</div>
+      </div>`;
+    }
+
+    if (sorted.length > 0) {
+      html += '</div></div>'; // close .token-grid + .token-page
+    }
+
+    html += this._pageFooter();
+    return html;
+  },
+
+  openTokenSlips(beneficiaries, meta) {
+    const html = this.generateTokenSlips(beneficiaries, meta);
+    this._openOrDownload(html, 'tokens.html');
+  },
+
+  // --- Private Helpers ---
+
+  _esc(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  },
+
+  _openOrDownload(html, filename) {
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(html);
+      printWindow.document.close();
+    } else {
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  },
+
+  _checklistHeader(eventLabel, eventDate, totalPages) {
+    const title = I18N.t('print.checklist_title');
+    const printBtn = I18N.t('setup.generate_checklist');
+    return `<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<title>${this._esc(title)} — ${this._esc(eventLabel)}</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Noto Sans Bengali","Kalpurush","Inter","Segoe UI",sans-serif;
+    font-size: 12pt;
+    color: #000;
+    background: #fff;
+  }
+  .no-print { text-align: center; padding: 16px; background: #1565C0; color: white; }
+  .no-print button {
+    margin-top: 8px; padding: 10px 24px; font-size: 16px;
+    cursor: pointer; border: none; border-radius: 6px;
+    background: white; color: #1565C0; font-weight: 700;
+  }
+  .checklist-page {
+    width: 210mm; margin: 0 auto; padding: 10mm 12mm;
+    page-break-after: always;
+  }
+  .checklist-page:last-of-type { page-break-after: auto; }
+  .page-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 2px solid #000; padding-bottom: 4mm; margin-bottom: 4mm;
+  }
+  .page-header-left h1 { font-size: 16pt; font-weight: 700; }
+  .page-header-left .event-date { font-size: 11pt; color: #333; }
+  .page-header-right { font-size: 11pt; text-align: right; }
+  .instructions {
+    background: #f0f0f0; border: 1px solid #999; padding: 3mm 4mm;
+    margin-bottom: 4mm; font-size: 11pt; font-weight: 600;
+  }
+  .checklist-table {
+    width: 100%; border-collapse: collapse; font-size: 12pt;
+  }
+  .checklist-table th, .checklist-table td {
+    border: 1px solid #000; padding: 2mm 3mm; text-align: left;
+  }
+  .checklist-table th {
+    background: #e0e0e0; font-weight: 700; font-size: 11pt;
+  }
+  .chk-col { width: 10mm; text-align: center; font-size: 14pt; }
+  .num-col { width: 10mm; text-align: center; }
+  .name-col { font-size: 14pt; font-weight: 600; }
+  .id-col { width: 22mm; font-family: monospace; font-size: 10pt; }
+  .phone-col { width: 18mm; font-size: 10pt; }
+  @media print {
+    .no-print { display: none; }
+    body { margin: 0; }
+    .checklist-page { padding: 8mm 10mm; }
+  }
+</style>
+</head><body>
+<div class="no-print">
+  <strong>${this._esc(eventLabel)} — ${this._esc(title)}</strong><br>
+  <button onclick="window.print()">🖨️ ${this._esc(printBtn)}</button>
+</div>
+`;
+  },
+
+  _checklistPageHeader(eventLabel, eventDate, pageNum, totalPages, isFirst) {
+    const pageLabel = I18N.t('print.page');
+    const ofLabel = I18N.t('common.of');
+    let html = `<div class="page-header">
+      <div class="page-header-left">
+        <h1>${this._esc(eventLabel)}</h1>
+        ${eventDate ? `<div class="event-date">${this._esc(eventDate)}</div>` : ''}
+      </div>
+      <div class="page-header-right">
+        ${this._esc(pageLabel)} ${pageNum} ${this._esc(ofLabel)} ${totalPages}
+      </div>
+    </div>`;
+
+    if (isFirst) {
+      const instructions = I18N.t('print.instructions');
+      html += `<div class="instructions">${this._esc(instructions)}</div>`;
+    }
+
+    return html;
+  },
+
+  _tokenHeader(eventLabel) {
+    const title = I18N.t('print.token_title');
+    const printBtn = I18N.t('setup.generate_tokens');
+    return `<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<title>${this._esc(title)} — ${this._esc(eventLabel)}</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Noto Sans Bengali","Kalpurush","Inter","Segoe UI",sans-serif;
+    color: #000;
+    background: #fff;
+  }
+  .no-print { text-align: center; padding: 16px; background: #1565C0; color: white; }
+  .no-print button {
+    margin-top: 8px; padding: 10px 24px; font-size: 16px;
+    cursor: pointer; border: none; border-radius: 6px;
+    background: white; color: #1565C0; font-weight: 700;
+  }
+  .token-page {
+    width: 210mm; margin: 0 auto; padding: 5mm;
+    page-break-after: always;
+  }
+  .token-page:last-of-type { page-break-after: auto; }
+  .token-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 0;
+    width: 100%;
+    min-height: 277mm; /* A4 minus padding */
+  }
+  .token-slip {
+    border: 1px dashed #666;
+    padding: 4mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+  }
+  .token-id {
+    font-size: 18pt;
+    font-weight: 700;
+    font-family: monospace;
+    margin-bottom: 2mm;
+  }
+  .token-name {
+    font-size: 12pt;
+    font-weight: 600;
+    line-height: 1.2;
+    word-wrap: break-word;
+    max-width: 100%;
+  }
+  .token-event {
+    font-size: 8pt;
+    color: #555;
+    margin-top: auto;
+    padding-top: 2mm;
+  }
+  @media print {
+    .no-print { display: none; }
+    body { margin: 0; }
+    .token-page { padding: 3mm; }
+  }
+</style>
+</head><body>
+<div class="no-print">
+  <strong>${this._esc(eventLabel)} — ${this._esc(title)}</strong><br>
+  <button onclick="window.print()">🖨️ ${this._esc(printBtn)}</button>
+</div>
+`;
+  },
+
+  _pageFooter() {
+    return '</body></html>';
+  },
+};
+/* ============================================
+   BACKUP — JSON Backup/Restore
+   ============================================ */
+
+const Backup = {
+
+  exportState() {
+    const meta = DataManager.getMeta();
+    const data = {
+      version: 1,
+      app: 'bd-dist',
+      exported_at: new Date().toISOString(),
+      meta: meta,
+      beneficiaries: DataManager.getBeneficiaries(),
+      lang: I18N.getLang(),
+    };
+
+    const json = JSON.stringify(data, null, 2);
+    const eventName = meta?.event_name || 'distribution';
+    const date = new Date().toISOString().slice(0, 10);
+    const filename = `${eventName.replace(/\s+/g, '-')}-backup-${date}.json`;
+    this._download(json, filename);
+  },
+
+  importState(jsonText) {
+    let data;
+    try {
+      data = JSON.parse(jsonText);
+    } catch {
+      return { success: false, error: I18N.t('backup.invalid_file') };
+    }
+
+    if (!data || data.app !== 'bd-dist' || !data.version || !Array.isArray(data.beneficiaries)) {
+      return { success: false, error: I18N.t('backup.invalid_file') };
+    }
+
+    if (data.meta) {
+      DataManager.saveMeta(data.meta);
+    }
+    DataManager.saveBeneficiaries(data.beneficiaries);
+
+    if (data.lang) {
+      I18N.setLang(data.lang);
+    }
+
+    return { success: true, count: data.beneficiaries.length };
+  },
+
+  triggerImport() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.style.display = 'none';
+
+    input.addEventListener('change', () => {
+      const file = input.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const doImport = () => {
+          const result = this.importState(reader.result);
+          if (result.success) {
+            UI.toastSuccess(I18N.t('backup.import_success') + ` (${result.count})`);
+          } else {
+            UI.toastError(result.error);
+          }
+        };
+
+        if (DataManager.hasData()) {
+          UI.showConfirm(
+            I18N.t('backup.restore'),
+            I18N.t('backup.confirm_restore'),
+            doImport
+          );
+        } else {
+          doImport();
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    document.body.appendChild(input);
+    input.click();
+    document.body.removeChild(input);
+  },
+
+  _download(content, filename) {
+    const blob = new Blob([content], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  },
+};
+/* ============================================
    STATS — Dashboard Counters + Progress
    ============================================ */
 
@@ -2121,14 +3023,16 @@ const App = {
     I18N.init();
     UI.init();
     Search.init();
+    Distribute.init();
     this._bindNavigation();
     this._bindSetupActions();
     this._bindScanActions();
     this._bindReportActions();
     this._bindLangToggle();
+    this._initBatteryMonitor();
     I18N.onLangChange(() => this._refreshUI());
     this._refreshUI();
-    this.switchTab(DataManager.hasData() ? 'scan' : 'setup');
+    this.switchTab(DataManager.hasData() ? 'distribute' : 'setup');
   },
 
   // --- Tab Navigation ---
@@ -2142,6 +3046,7 @@ const App = {
     if (panel) panel.classList.add('active');
     if (navBtn) navBtn.classList.add('active');
 
+    if (tab === 'distribute') this._refreshDistributePanel();
     if (tab === 'scan') this._refreshScanPanel();
     if (tab === 'reports') this._refreshReportsPanel();
     if (tab === 'setup') this._refreshSetupPanel();
@@ -2189,9 +3094,15 @@ const App = {
     if (eventName) eventName.addEventListener('change', () => this._saveEventInfo());
     if (eventDate) eventDate.addEventListener('change', () => this._saveEventInfo());
 
-    // Generate cards
+    // Generate print materials
     const genBtn = document.getElementById('btn-generate-cards');
     if (genBtn) genBtn.addEventListener('click', () => this._generateCards());
+
+    const checklistBtn = document.getElementById('btn-generate-checklist');
+    if (checklistBtn) checklistBtn.addEventListener('click', () => this._generateChecklist());
+
+    const tokenBtn = document.getElementById('btn-generate-tokens');
+    if (tokenBtn) tokenBtn.addEventListener('click', () => this._generateTokens());
 
     // Clear data
     const clearBtn = document.getElementById('btn-clear-data');
@@ -2306,6 +3217,35 @@ const App = {
     }
   },
 
+  _generateChecklist() {
+    const list = DataManager.getBeneficiaries();
+    if (!list.length) { UI.toastError('No beneficiaries loaded'); return; }
+    const meta = DataManager.getMeta();
+    UI.toastSuccess(I18N.t('common.loading'));
+    setTimeout(() => PrintGenerator.openChecklist(list, meta), 100);
+  },
+
+  _generateTokens() {
+    const list = DataManager.getBeneficiaries();
+    if (!list.length) { UI.toastError('No beneficiaries loaded'); return; }
+    const meta = DataManager.getMeta();
+    UI.toastSuccess(I18N.t('common.loading'));
+    setTimeout(() => PrintGenerator.openTokenSlips(list, meta), 100);
+  },
+
+  // --- Distribute Tab ---
+
+  _refreshDistributePanel() {
+    if (!DataManager.hasData()) {
+      UI.show('#distribute-no-data');
+      UI.hide('#distribute-ready');
+    } else {
+      UI.hide('#distribute-no-data');
+      UI.show('#distribute-ready');
+      Distribute.refresh();
+    }
+  },
+
   // --- Scan Tab ---
 
   _bindScanActions() {
@@ -2413,6 +3353,22 @@ const App = {
         UI.toastSuccess('Uncollected list downloaded');
       });
     }
+
+    // Backup buttons
+    const backupSaveBtn = document.getElementById('btn-backup-save');
+    if (backupSaveBtn) {
+      backupSaveBtn.addEventListener('click', () => {
+        Backup.exportState();
+        UI.toastSuccess(I18N.t('backup.export_success'));
+      });
+    }
+
+    const backupRestoreBtn = document.getElementById('btn-backup-restore');
+    if (backupRestoreBtn) {
+      backupRestoreBtn.addEventListener('click', () => {
+        Backup.triggerImport();
+      });
+    }
   },
 
   _refreshReportsPanel() {
@@ -2441,6 +3397,27 @@ const App = {
 
     Stats.update();
     this._refreshSetupPanel();
+  },
+
+  // --- Battery Monitor ---
+
+  _batteryWarned: false,
+
+  _initBatteryMonitor() {
+    if (!('getBattery' in navigator)) return;
+    navigator.getBattery().then(battery => {
+      const check = () => {
+        if (battery.level <= 0.20 && !battery.charging && !this._batteryWarned) {
+          this._batteryWarned = true;
+          UI.toastWarning(I18N.t('battery.low_hint'));
+        }
+        if (battery.level > 0.20 || battery.charging) {
+          this._batteryWarned = false;
+        }
+      };
+      battery.addEventListener('levelchange', check);
+      battery.addEventListener('chargingchange', check);
+    }).catch(() => {});
   },
 };
 

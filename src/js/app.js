@@ -9,14 +9,16 @@ const App = {
     I18N.init();
     UI.init();
     Search.init();
+    Distribute.init();
     this._bindNavigation();
     this._bindSetupActions();
     this._bindScanActions();
     this._bindReportActions();
     this._bindLangToggle();
+    this._initBatteryMonitor();
     I18N.onLangChange(() => this._refreshUI());
     this._refreshUI();
-    this.switchTab(DataManager.hasData() ? 'scan' : 'setup');
+    this.switchTab(DataManager.hasData() ? 'distribute' : 'setup');
   },
 
   // --- Tab Navigation ---
@@ -30,6 +32,7 @@ const App = {
     if (panel) panel.classList.add('active');
     if (navBtn) navBtn.classList.add('active');
 
+    if (tab === 'distribute') this._refreshDistributePanel();
     if (tab === 'scan') this._refreshScanPanel();
     if (tab === 'reports') this._refreshReportsPanel();
     if (tab === 'setup') this._refreshSetupPanel();
@@ -77,9 +80,15 @@ const App = {
     if (eventName) eventName.addEventListener('change', () => this._saveEventInfo());
     if (eventDate) eventDate.addEventListener('change', () => this._saveEventInfo());
 
-    // Generate cards
+    // Generate print materials
     const genBtn = document.getElementById('btn-generate-cards');
     if (genBtn) genBtn.addEventListener('click', () => this._generateCards());
+
+    const checklistBtn = document.getElementById('btn-generate-checklist');
+    if (checklistBtn) checklistBtn.addEventListener('click', () => this._generateChecklist());
+
+    const tokenBtn = document.getElementById('btn-generate-tokens');
+    if (tokenBtn) tokenBtn.addEventListener('click', () => this._generateTokens());
 
     // Clear data
     const clearBtn = document.getElementById('btn-clear-data');
@@ -194,6 +203,35 @@ const App = {
     }
   },
 
+  _generateChecklist() {
+    const list = DataManager.getBeneficiaries();
+    if (!list.length) { UI.toastError('No beneficiaries loaded'); return; }
+    const meta = DataManager.getMeta();
+    UI.toastSuccess(I18N.t('common.loading'));
+    setTimeout(() => PrintGenerator.openChecklist(list, meta), 100);
+  },
+
+  _generateTokens() {
+    const list = DataManager.getBeneficiaries();
+    if (!list.length) { UI.toastError('No beneficiaries loaded'); return; }
+    const meta = DataManager.getMeta();
+    UI.toastSuccess(I18N.t('common.loading'));
+    setTimeout(() => PrintGenerator.openTokenSlips(list, meta), 100);
+  },
+
+  // --- Distribute Tab ---
+
+  _refreshDistributePanel() {
+    if (!DataManager.hasData()) {
+      UI.show('#distribute-no-data');
+      UI.hide('#distribute-ready');
+    } else {
+      UI.hide('#distribute-no-data');
+      UI.show('#distribute-ready');
+      Distribute.refresh();
+    }
+  },
+
   // --- Scan Tab ---
 
   _bindScanActions() {
@@ -301,6 +339,22 @@ const App = {
         UI.toastSuccess('Uncollected list downloaded');
       });
     }
+
+    // Backup buttons
+    const backupSaveBtn = document.getElementById('btn-backup-save');
+    if (backupSaveBtn) {
+      backupSaveBtn.addEventListener('click', () => {
+        Backup.exportState();
+        UI.toastSuccess(I18N.t('backup.export_success'));
+      });
+    }
+
+    const backupRestoreBtn = document.getElementById('btn-backup-restore');
+    if (backupRestoreBtn) {
+      backupRestoreBtn.addEventListener('click', () => {
+        Backup.triggerImport();
+      });
+    }
   },
 
   _refreshReportsPanel() {
@@ -329,6 +383,27 @@ const App = {
 
     Stats.update();
     this._refreshSetupPanel();
+  },
+
+  // --- Battery Monitor ---
+
+  _batteryWarned: false,
+
+  _initBatteryMonitor() {
+    if (!('getBattery' in navigator)) return;
+    navigator.getBattery().then(battery => {
+      const check = () => {
+        if (battery.level <= 0.20 && !battery.charging && !this._batteryWarned) {
+          this._batteryWarned = true;
+          UI.toastWarning(I18N.t('battery.low_hint'));
+        }
+        if (battery.level > 0.20 || battery.charging) {
+          this._batteryWarned = false;
+        }
+      };
+      battery.addEventListener('levelchange', check);
+      battery.addEventListener('chargingchange', check);
+    }).catch(() => {});
   },
 };
 

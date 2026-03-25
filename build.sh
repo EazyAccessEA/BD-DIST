@@ -13,7 +13,7 @@ HTML=$(cat "$SRC/index.html")
 
 # Build CSS block
 CSS=""
-for f in "$SRC/css/base.css" "$SRC/css/components.css" "$SRC/css/layout.css" "$SRC/css/print.css"; do
+for f in "$SRC/css/base.css" "$SRC/css/components.css" "$SRC/css/layout.css" "$SRC/css/distribute.css" "$SRC/css/print.css"; do
   CSS="$CSS$(cat "$f")\n"
 done
 
@@ -33,6 +33,9 @@ for f in \
   "$SRC/js/qr-generator.js" \
   "$SRC/js/scanner.js" \
   "$SRC/js/search.js" \
+  "$SRC/js/distribute.js" \
+  "$SRC/js/print-generator.js" \
+  "$SRC/js/backup.js" \
   "$SRC/js/stats.js" \
   "$SRC/js/app.js"; do
   APP_JS="$APP_JS$(cat "$f")\n"
@@ -55,6 +58,7 @@ done
   cat "$SRC/css/base.css"
   cat "$SRC/css/components.css"
   cat "$SRC/css/layout.css"
+  cat "$SRC/css/distribute.css"
   cat "$SRC/css/print.css"
   echo '  </style>'
   echo '</head>'
@@ -76,6 +80,9 @@ done
   cat "$SRC/js/qr-generator.js"
   cat "$SRC/js/scanner.js"
   cat "$SRC/js/search.js"
+  cat "$SRC/js/distribute.js"
+  cat "$SRC/js/print-generator.js"
+  cat "$SRC/js/backup.js"
   cat "$SRC/js/stats.js"
   cat "$SRC/js/app.js"
   echo '</script>'
