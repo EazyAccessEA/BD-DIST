@@ -59,7 +59,8 @@ done
   echo '  </style>'
   echo '</head>'
   # Extract body content from index.html (between <body> and </body>)
-  sed -n '/<body>/,/<\/body>/p' "$SRC/index.html" | head -n -1 | tail -n +1
+  echo '<body>'
+  sed -n '/<body>/,/<\/body>/p' "$SRC/index.html" | tail -n +2 | head -n -1
   # Inject scripts before </body>
   echo '<script>'
   cat "$SRC/vendor/qrcode-generator.min.js"
