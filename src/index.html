@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1565C0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>খাদ্য বিতরণ — Food Distribution</title>
+  <!-- CSS injected by build -->
+  <!-- VENDOR_CSS -->
+  <!-- APP_CSS -->
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- Header -->
+  <header class="app-header">
+    <h1 data-i18n="app.title">খাদ্য বিতরণ</h1>
+    <div class="header-actions">
+      <button class="lang-toggle" id="btn-lang-toggle" aria-label="Toggle language">English</button>
+    </div>
+  </header>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Main Content -->
+  <main class="app-content">
+
+    <!-- ==================== SETUP PANEL ==================== -->
+    <div class="tab-panel active" id="panel-setup">
+
+      <!-- Event Info -->
+      <div class="card mb-md">
+        <div class="input-group mb-md">
+          <label data-i18n="setup.event_name">ইভেন্টের নাম</label>
+          <input class="input" type="text" id="event-name"
+            data-i18n-placeholder="setup.event_name" placeholder="ইভেন্টের নাম">
+        </div>
+        <div class="input-group">
+          <label data-i18n="setup.event_date">ইভেন্টের তারিখ</label>
+          <input class="input" type="date" id="event-date">
+        </div>
+      </div>
+
+      <!-- No Data State -->
+      <div id="setup-no-data">
+        <div class="empty-state">
+          <div class="empty-state-icon">📋</div>
+          <div class="empty-state-title" data-i18n="setup.no_data">কোনো তথ্য লোড হয়নি</div>
+          <div class="empty-state-text" data-i18n="setup.no_data_desc">শুরু করতে একটি CSV ফাইল আমদানি করুন</div>
+        </div>
+      </div>
+
+      <!-- CSV Import -->
+      <div class="file-drop mb-md" id="csv-drop-zone">
+        <div class="file-drop-icon">📂</div>
+        <div class="font-bold" data-i18n="setup.import_csv">তালিকা আমদানি করুন</div>
+        <div class="text-muted mt-sm" data-i18n="setup.drop_hint">অথবা এখানে টেনে আনুন</div>
+        <input type="file" accept=".csv,.txt" id="csv-file-input" class="hidden" aria-label="Select CSV file">
+      </div>
+
+      <!-- Data Loaded State -->
+      <div id="setup-data-loaded" class="hidden">
+        <div class="card mb-md" style="text-align:center;">
+          <div class="counter" style="justify-content:center;">
+            <span class="counter-value text-success" id="setup-count">0</span>
+            <span class="counter-label" data-i18n="setup.loaded">জন সুবিধাভোগী লোড হয়েছে</span>
+          </div>
+        </div>
+
+        <!-- Search -->
+        <div class="mb-md">
+          <input class="input input-search" type="text" id="setup-search"
+            data-i18n-placeholder="setup.search_list" placeholder="নাম দিয়ে খুঁজুন..." autocomplete="off">
+        </div>
+
+        <!-- Beneficiary List -->
+        <div class="beneficiary-list mb-md" id="setup-list"></div>
+
+        <!-- Action Buttons -->
+        <div style="display:flex;flex-direction:column;gap:var(--space-sm);">
+          <button class="btn btn-primary btn-block btn-lg" id="btn-generate-cards">
+            🎴 <span data-i18n="setup.generate_cards">QR কার্ড তৈরি করুন</span>
+          </button>
+          <button class="btn btn-outline btn-block" id="btn-add-walkin">
+            ➕ <span data-i18n="setup.add_walkin">ওয়াক-ইন যোগ করুন</span>
+          </button>
+          <button class="btn btn-ghost btn-block text-danger" id="btn-clear-data">
+            🗑️ <span data-i18n="setup.clear_data">সমস্ত তথ্য মুছুন</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== SCAN PANEL ==================== -->
+    <div class="tab-panel" id="panel-scan">
+
+      <!-- No Data Warning -->
+      <div id="scan-no-data">
+        <div class="empty-state">
+          <div class="empty-state-icon">📷</div>
+          <div class="empty-state-title" data-i18n="scan.no_data_warn">প্রথমে সেটআপ ট্যাবে সুবিধাভোগী তালিকা আমদানি করুন</div>
+        </div>
+      </div>
+
+      <!-- Scan Ready -->
+      <div id="scan-ready" class="hidden">
+
+        <!-- Live Counter -->
+        <div class="card mb-md" style="text-align:center;">
+          <div style="display:flex;justify-content:center;gap:var(--space-xl);flex-wrap:wrap;">
+            <div>
+              <div class="stat-number text-success" id="scan-stat-collected">0</div>
+              <div class="stat-label" data-i18n="scan.collected">সংগৃহীত</div>
+            </div>
+            <div>
+              <div class="stat-number text-danger" id="scan-stat-remaining">0</div>
+              <div class="stat-label" data-i18n="scan.remaining">বাকি</div>
+            </div>
+          </div>
+          <div class="progress-bar mt-md">
+            <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+          </div>
+          <div class="text-muted mt-sm" id="progress-text">0 / 0 (0%)</div>
+        </div>
+
+        <!-- Scanner Viewfinder -->
+        <div class="scan-area mb-md">
+          <div class="scan-viewfinder" id="scan-viewfinder"></div>
+        </div>
+
+        <!-- Scanner Controls -->
+        <div style="display:flex;flex-direction:column;gap:var(--space-sm);">
+          <button class="btn btn-primary btn-block btn-xl" id="btn-start-scan">
+            📷 <span data-i18n="scan.start">স্ক্যানার চালু করুন</span>
+          </button>
+          <button class="btn btn-danger btn-block btn-lg hidden" id="btn-stop-scan">
+            ⏹ <span data-i18n="scan.stop">স্ক্যানার বন্ধ করুন</span>
+          </button>
+          <button class="btn btn-outline btn-block" id="btn-manual-entry">
+            🔍 <span data-i18n="scan.search_backup">নাম দিয়ে খুঁজুন</span>
+          </button>
+        </div>
+
+        <!-- Manual Search Panel (hidden by default) -->
+        <div id="scan-search-panel" class="hidden mt-md">
+          <div class="card">
+            <div class="input-group mb-md">
+              <input class="input input-search" type="text" id="scan-search-input"
+                data-i18n-placeholder="scan.search_backup" placeholder="নাম দিয়ে খুঁজুন..." autocomplete="off">
+            </div>
+            <div class="beneficiary-list" id="scan-search-results" style="max-height:300px;"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== REPORTS PANEL ==================== -->
+    <div class="tab-panel" id="panel-reports">
+
+      <!-- Summary Stats -->
+      <div class="stat-grid mb-md">
+        <div class="stat-card">
+          <div class="stat-number" id="stat-total">0</div>
+          <div class="stat-label" data-i18n="reports.total">মোট</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number text-success" id="stat-collected">0</div>
+          <div class="stat-label" data-i18n="reports.collected">সংগৃহীত</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number text-danger" id="stat-remaining">0</div>
+          <div class="stat-label" data-i18n="reports.remaining">বাকি</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number text-warning" id="stat-walkins">0</div>
+          <div class="stat-label" data-i18n="reports.walkins">ওয়াক-ইন</div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="card mb-md">
+        <h3 data-i18n="reports.progress">অগ্রগতি</h3>
+        <div class="progress-bar mt-sm">
+          <div class="progress-fill" id="reports-progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Export Buttons -->
+      <div style="display:flex;flex-direction:column;gap:var(--space-sm);" class="mb-md">
+        <button class="btn btn-primary btn-block btn-lg" id="btn-export-report">
+          📊 <span data-i18n="reports.export">রিপোর্ট CSV রপ্তানি করুন</span>
+        </button>
+        <button class="btn btn-outline btn-block" id="btn-export-uncollected">
+          📋 <span data-i18n="reports.uncollected">অসংগৃহীত তালিকা</span>
+        </button>
+      </div>
+
+      <!-- Collected List -->
+      <div class="mb-md">
+        <h3 class="mb-sm" data-i18n="reports.collected_list">সংগৃহীত তালিকা</h3>
+        <div class="beneficiary-list" id="reports-collected-list"></div>
+      </div>
+
+      <!-- Uncollected List -->
+      <div>
+        <h3 class="mb-sm" data-i18n="reports.uncollected">অসংগৃহীত তালিকা</h3>
+        <div class="beneficiary-list" id="reports-uncollected-list"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="nav-setup" data-tab="setup" aria-label="Setup">
+      <span class="nav-icon">📋</span>
+      <span data-i18n="nav.setup">সেটআপ</span>
+    </button>
+    <button class="nav-item" id="nav-scan" data-tab="scan" aria-label="Scan">
+      <span class="nav-icon">📷</span>
+      <span data-i18n="nav.scan">স্ক্যান</span>
+    </button>
+    <button class="nav-item" id="nav-reports" data-tab="reports" aria-label="Reports">
+      <span class="nav-icon">📊</span>
+      <span data-i18n="nav.reports">রিপোর্ট</span>
+    </button>
+  </nav>
+
+</div>
+
+<!-- Vendor JS injected by build -->
+<!-- VENDOR_JS -->
+<!-- APP_JS -->
+
+</body>
+</html>
