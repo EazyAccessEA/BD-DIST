@@ -36,6 +36,7 @@ for f in \
   "$SRC/js/distribute.js" \
   "$SRC/js/print-generator.js" \
   "$SRC/js/backup.js" \
+  "$SRC/js/ration-setup.js" \
   "$SRC/js/stats.js" \
   "$SRC/js/app.js"; do
   APP_JS="$APP_JS$(cat "$f")\n"
@@ -83,6 +84,7 @@ done
   cat "$SRC/js/distribute.js"
   cat "$SRC/js/print-generator.js"
   cat "$SRC/js/backup.js"
+  cat "$SRC/js/ration-setup.js"
   cat "$SRC/js/stats.js"
   cat "$SRC/js/app.js"
   echo '</script>'

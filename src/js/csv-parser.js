@@ -13,6 +13,10 @@ const CSVParser = {
     const headers = this._parseLine(lines[0]).map(h => h.toLowerCase().trim());
     const nameCol = this._findColumn(headers, ['name', 'নাম', 'full_name', 'fullname', 'beneficiary']);
     const phoneCol = this._findColumn(headers, ['phone', 'ফোন', 'mobile', 'phone_number', 'contact', 'tel']);
+    const householdCol = this._findColumn(headers, ['household', 'পরিবার', 'family', 'hh']);
+    const nidCol = this._findColumn(headers, ['nid', 'national_id', 'এনআইডি']);
+    const notesCol = this._findColumn(headers, ['notes', 'নোট', 'comments']);
+    const photoCol = this._findColumn(headers, ['photo', 'image', 'ছবি']);
 
     if (nameCol === -1) {
       return { error: 'CSV must have a "name" column', rows: [] };
@@ -31,13 +35,17 @@ const CSVParser = {
       const cols = this._parseLine(line);
       const name = (cols[nameCol] || '').trim();
       const phone = (cols[phoneCol] || '').trim().replace(/[^0-9+]/g, '');
+      const household = householdCol !== -1 ? (cols[householdCol] || '').trim() : '';
+      const nid = nidCol !== -1 ? (cols[nidCol] || '').trim() : '';
+      const notes = notesCol !== -1 ? (cols[notesCol] || '').trim() : '';
+      const photo = photoCol !== -1 ? (cols[photoCol] || '').trim() : '';
 
       if (!name) {
         errors.push(`Row ${i + 1}: missing name`);
         continue;
       }
 
-      rows.push({ name, phone });
+      rows.push({ name, phone, household, nid, notes, photo });
     }
 
     return { error: null, rows, warnings: errors };
@@ -85,13 +93,20 @@ const CSVParser = {
   },
 
   exportReport(beneficiaries, meta) {
-    const headers = ['ID', 'Name', 'Phone', 'Collected', 'Collected At', 'Notes'];
+    const headers = [
+      'ID', 'Name', 'Phone', 'Household', 'NID',
+      'Collected', 'Collected At', 'Proxy', 'Proxy Name', 'Notes',
+    ];
     const rows = beneficiaries.map(b => [
       b.id,
       `"${(b.name || '').replace(/"/g, '""')}"`,
       b.phone,
+      b.household || '',
+      b.nid || '',
       b.collected ? 'Yes' : 'No',
       b.collected_at ? new Date(b.collected_at).toLocaleString() : '',
+      b.proxy ? 'Yes' : 'No',
+      b.proxy_name || '',
       b.notes || '',
     ]);
 
@@ -106,11 +121,12 @@ const CSVParser = {
 
   exportUncollected(beneficiaries, meta) {
     const uncollected = beneficiaries.filter(b => !b.collected);
-    const headers = ['ID', 'Name', 'Phone'];
+    const headers = ['ID', 'Name', 'Phone', 'Household'];
     const rows = uncollected.map(b => [
       b.id,
       `"${(b.name || '').replace(/"/g, '""')}"`,
       b.phone,
+      b.household || '',
     ]);
 
     let csv = '\uFEFF';

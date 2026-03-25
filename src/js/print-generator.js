@@ -32,6 +32,7 @@ const PrintGenerator = {
             <th class="name-col">${I18N.t('print.col_name') || 'Name'}</th>
             <th class="id-col">ID</th>
             <th class="phone-col">${I18N.t('print.col_phone') || 'Phone'}</th>
+            <th class="sig-col">${I18N.t('print.col_signature')}</th>
           </tr></thead><tbody>`;
       }
 
@@ -42,6 +43,7 @@ const PrintGenerator = {
         <td class="name-col">${this._esc(b.name)}</td>
         <td class="id-col">${b.id}</td>
         <td class="phone-col">**${b.phone_last4}</td>
+        <td class="sig-col"></td>
       </tr>`;
     }
 
@@ -58,12 +60,12 @@ const PrintGenerator = {
     this._openOrDownload(html, 'checklist.html');
   },
 
-  // --- Token Slips ---
+  // --- Token Slips (Two-Part Tear-off) ---
 
   generateTokenSlips(beneficiaries, meta) {
     const eventLabel = meta?.event_name || 'Food Distribution';
     const sorted = [...beneficiaries].sort((a, b) => a.name.localeCompare(b.name));
-    const slipsPerPage = 20; // 4 cols × 5 rows
+    const slipsPerPage = 10; // 2 cols × 5 rows
 
     let html = this._tokenHeader(eventLabel);
 
@@ -77,10 +79,23 @@ const PrintGenerator = {
       }
 
       const b = sorted[i];
-      html += `<div class="token-slip">
-        <div class="token-id">${b.id}</div>
-        <div class="token-name">${this._esc(b.name)}</div>
-        <div class="token-event">${this._esc(eventLabel)}</div>
+      const tearText = I18N.t('print.tear_here');
+      const keepText = I18N.t('print.keep_this');
+      const stubText = I18N.t('print.organizer_stub');
+
+      html += `<div class="token-cell">
+        <div class="token-top">
+          <div class="token-id">${b.id}</div>
+          <div class="token-name">${this._esc(b.name)}</div>
+          <div class="token-event">${this._esc(eventLabel)}</div>
+          <div class="token-keep">${this._esc(keepText)}</div>
+        </div>
+        <div class="token-perforation">${this._esc(tearText)}</div>
+        <div class="token-bottom">
+          <div class="token-id token-id-small">${b.id}</div>
+          <div class="token-name-small">${this._esc(b.name)}</div>
+          <div class="token-stub-label">${this._esc(stubText)}</div>
+        </div>
       </div>`;
     }
 
@@ -169,11 +184,12 @@ const PrintGenerator = {
   .checklist-table th {
     background: #e0e0e0; font-weight: 700; font-size: 11pt;
   }
-  .chk-col { width: 10mm; text-align: center; font-size: 14pt; }
-  .num-col { width: 10mm; text-align: center; }
+  .chk-col { width: 8mm; text-align: center; font-size: 14pt; }
+  .num-col { width: 8mm; text-align: center; }
   .name-col { font-size: 14pt; font-weight: 600; }
-  .id-col { width: 22mm; font-family: monospace; font-size: 10pt; }
-  .phone-col { width: 18mm; font-size: 10pt; }
+  .id-col { width: 18mm; font-family: monospace; font-size: 10pt; }
+  .phone-col { width: 16mm; font-size: 10pt; }
+  .sig-col { width: 30mm; }
   @media print {
     .no-print { display: none; }
     body { margin: 0; }
@@ -202,7 +218,7 @@ const PrintGenerator = {
     </div>`;
 
     if (isFirst) {
-      const instructions = I18N.t('print.instructions');
+      const instructions = I18N.t('print.instructions_v2');
       html += `<div class="instructions">${this._esc(instructions)}</div>`;
     }
 
@@ -236,27 +252,53 @@ const PrintGenerator = {
   .token-page:last-of-type { page-break-after: auto; }
   .token-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(5, 1fr);
     gap: 0;
     width: 100%;
     min-height: 277mm; /* A4 minus padding */
   }
-  .token-slip {
+  .token-cell {
     border: 1px dashed #666;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .token-top {
+    flex: 3;
     padding: 4mm;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    overflow: hidden;
+  }
+  .token-perforation {
+    border-top: 2px dashed #000;
+    text-align: center;
+    font-size: 8pt;
+    color: #555;
+    padding: 1mm 0;
+    letter-spacing: 2px;
+  }
+  .token-bottom {
+    flex: 2;
+    padding: 3mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #f9f9f9;
   }
   .token-id {
     font-size: 18pt;
     font-weight: 700;
     font-family: monospace;
     margin-bottom: 2mm;
+  }
+  .token-id-small {
+    font-size: 14pt;
   }
   .token-name {
     font-size: 12pt;
@@ -265,11 +307,30 @@ const PrintGenerator = {
     word-wrap: break-word;
     max-width: 100%;
   }
+  .token-name-small {
+    font-size: 9pt;
+    font-weight: 500;
+    line-height: 1.2;
+    word-wrap: break-word;
+    max-width: 100%;
+    color: #333;
+  }
   .token-event {
-    font-size: 8pt;
+    font-size: 9pt;
     color: #555;
-    margin-top: auto;
-    padding-top: 2mm;
+    margin-top: 2mm;
+  }
+  .token-keep {
+    font-size: 8pt;
+    color: #777;
+    margin-top: 2mm;
+    font-style: italic;
+  }
+  .token-stub-label {
+    font-size: 7pt;
+    color: #777;
+    margin-top: 1mm;
+    font-style: italic;
   }
   @media print {
     .no-print { display: none; }

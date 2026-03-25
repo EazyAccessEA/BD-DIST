@@ -45,6 +45,15 @@
         </div>
       </div>
 
+      <!-- Ration Definition -->
+      <div class="card mb-md" id="ration-setup-card">
+        <h3 data-i18n="setup.ration_title">রেশন প্যাকেজ</h3>
+        <div id="ration-items-list" class="mt-sm"></div>
+        <button class="btn btn-outline btn-sm mt-sm" id="btn-add-ration-item">
+          ➕ <span data-i18n="setup.ration_add">+ আইটেম যোগ করুন</span>
+        </button>
+      </div>
+
       <!-- No Data State -->
       <div id="setup-no-data">
         <div class="empty-state">
@@ -234,6 +243,14 @@
           <div class="stat-number text-warning" id="stat-walkins">0</div>
           <div class="stat-label" data-i18n="reports.walkins">ওয়াক-ইন</div>
         </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-proxies">0</div>
+          <div class="stat-label" data-i18n="reports.proxies">প্রক্সি</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number text-warning" id="stat-corrections">0</div>
+          <div class="stat-label" data-i18n="reports.corrections">সংশোধন</div>
+        </div>
       </div>
 
       <!-- Progress -->
@@ -252,6 +269,15 @@
         <button class="btn btn-outline btn-block" id="btn-export-uncollected">
           📋 <span data-i18n="reports.uncollected">অসংগৃহীত তালিকা</span>
         </button>
+      </div>
+
+      <!-- Ration Summary -->
+      <div class="mb-md" id="reports-ration-summary"></div>
+
+      <!-- Audit Log -->
+      <div class="mb-md">
+        <h3 class="mb-sm" data-i18n="reports.audit_log">অডিট লগ</h3>
+        <div id="reports-audit-log" class="beneficiary-list"></div>
       </div>
 
       <!-- Data Backup -->

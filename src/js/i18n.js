@@ -71,6 +71,12 @@ const I18N = {
     'reports.collected_list': { en: 'Collected List', bn: 'সংগৃহীত তালিকা' },
     'reports.no_data':      { en: 'No distribution data yet', bn: 'এখনো কোনো বিতরণ তথ্য নেই' },
     'reports.progress':     { en: 'Progress', bn: 'অগ্রগতি' },
+    'reports.proxies':      { en: 'Proxies', bn: 'প্রক্সি' },
+    'reports.corrections':  { en: 'Corrections', bn: 'সংশোধন' },
+    'reports.audit_log':    { en: 'Audit Log', bn: 'অডিট লগ' },
+    'reports.no_audit':     { en: 'No audit entries yet', bn: 'এখনো কোনো অডিট এন্ট্রি নেই' },
+    'reports.ration_summary': { en: 'Ration Summary', bn: 'রেশন সারসংক্ষেপ' },
+    'reports.total_distributed': { en: 'Total Distributed', bn: 'মোট বিতরণ' },
 
     // Common
     'common.cancel':        { en: 'Cancel', bn: 'বাতিল' },
@@ -100,6 +106,18 @@ const I18N = {
     'distribute.phone_hint':   { en: 'Phone ends', bn: 'ফোন শেষ' },
     'distribute.given':        { en: 'Given', bn: 'দেওয়া হয়েছে' },
     'distribute.no_data':      { en: 'Import list in Setup tab first', bn: 'প্রথমে সেটআপ ট্যাবে তালিকা আমদানি করুন' },
+    'distribute.undo':          { en: 'Undo Collection', bn: 'সংগ্রহ পূর্বাবস্থায় ফেরান' },
+    'distribute.undo_reason':   { en: 'Reason for undo', bn: 'পূর্বাবস্থায় ফেরানোর কারণ' },
+    'distribute.undo_mistake':  { en: 'Marked by mistake', bn: 'ভুলে চিহ্নিত' },
+    'distribute.undo_wrong':    { en: 'Wrong person', bn: 'ভুল ব্যক্তি' },
+    'distribute.undo_other':    { en: 'Other', bn: 'অন্যান্য' },
+    'distribute.proxy':         { en: 'Collected by proxy', bn: 'প্রক্সি দ্বারা সংগৃহীত' },
+    'distribute.proxy_name':    { en: 'Proxy name', bn: 'প্রক্সির নাম' },
+    'distribute.rations_label': { en: 'This person should receive:', bn: 'এই ব্যক্তি পাবেন:' },
+    'distribute.group_name':    { en: 'By Name', bn: 'নাম অনুসারে' },
+    'distribute.group_household': { en: 'By Household', bn: 'পরিবার অনুসারে' },
+    'distribute.household_header': { en: 'Household', bn: 'পরিবার' },
+    'distribute.mark_household':  { en: 'Mark all household members?', bn: 'পরিবারের সকল সদস্যকে চিহ্নিত করবেন?' },
 
     // Backup
     'backup.title':            { en: 'Data Backup', bn: 'ডেটা ব্যাকআপ' },
@@ -113,6 +131,13 @@ const I18N = {
     // Battery
     'battery.low_hint':        { en: 'Battery low! Use Distribute tab to save power (no camera)', bn: 'ব্যাটারি কম! ক্যামেরা ছাড়াই বিতরণ ট্যাবে যান' },
 
+    // Rations
+    'setup.ration_title':      { en: 'Ration Package', bn: 'রেশন প্যাকেজ' },
+    'setup.ration_empty':      { en: 'No ration items defined. Tap + to add.', bn: 'কোনো রেশন আইটেম নেই। যোগ করতে + ট্যাপ করুন।' },
+    'setup.ration_item':       { en: 'Item (e.g. Rice)', bn: 'আইটেম (যেমন চাল)' },
+    'setup.ration_unit':       { en: 'Unit (kg/L)', bn: 'একক (কেজি/লি)' },
+    'setup.ration_add':        { en: '+ Add Item', bn: '+ আইটেম যোগ করুন' },
+
     // Print
     'print.checklist_title':  { en: 'Beneficiary Checklist', bn: 'সুবিধাভোগী চেকলিস্ট' },
     'print.token_title':      { en: 'Distribution Tokens', bn: 'বিতরণ টোকেন' },
@@ -120,6 +145,11 @@ const I18N = {
     'print.page':             { en: 'Page', bn: 'পৃষ্ঠা' },
     'print.col_name':         { en: 'Name', bn: 'নাম' },
     'print.col_phone':        { en: 'Phone', bn: 'ফোন' },
+    'print.col_signature':    { en: 'Signature / Thumbprint', bn: 'স্বাক্ষর / টিপসই' },
+    'print.tear_here':        { en: '✂ Tear Here', bn: '✂ এখানে ছিঁড়ুন' },
+    'print.keep_this':        { en: 'Keep this slip', bn: 'এই স্লিপটি রাখুন' },
+    'print.organizer_stub':   { en: 'Organizer Stub', bn: 'আয়োজক স্টাব' },
+    'print.instructions_v2':  { en: 'Mark with ✓ when food is given. Collect signature or thumbprint.', bn: 'খাবার দেওয়া হলে ✓ চিহ্ন দিন। স্বাক্ষর বা টিপসই নিন।' },
 
     // Help
     'help.title':           { en: 'Quick Guide', bn: 'দ্রুত গাইড' },

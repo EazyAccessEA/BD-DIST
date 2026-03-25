@@ -1059,6 +1059,15 @@ img, svg {
         </div>
       </div>
 
+      <!-- Ration Definition -->
+      <div class="card mb-md" id="ration-setup-card">
+        <h3 data-i18n="setup.ration_title">রেশন প্যাকেজ</h3>
+        <div id="ration-items-list" class="mt-sm"></div>
+        <button class="btn btn-outline btn-sm mt-sm" id="btn-add-ration-item">
+          ➕ <span data-i18n="setup.ration_add">+ আইটেম যোগ করুন</span>
+        </button>
+      </div>
+
       <!-- No Data State -->
       <div id="setup-no-data">
         <div class="empty-state">
@@ -1248,6 +1257,14 @@ img, svg {
           <div class="stat-number text-warning" id="stat-walkins">0</div>
           <div class="stat-label" data-i18n="reports.walkins">ওয়াক-ইন</div>
         </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-proxies">0</div>
+          <div class="stat-label" data-i18n="reports.proxies">প্রক্সি</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number text-warning" id="stat-corrections">0</div>
+          <div class="stat-label" data-i18n="reports.corrections">সংশোধন</div>
+        </div>
       </div>
 
       <!-- Progress -->
@@ -1266,6 +1283,15 @@ img, svg {
         <button class="btn btn-outline btn-block" id="btn-export-uncollected">
           📋 <span data-i18n="reports.uncollected">অসংগৃহীত তালিকা</span>
         </button>
+      </div>
+
+      <!-- Ration Summary -->
+      <div class="mb-md" id="reports-ration-summary"></div>
+
+      <!-- Audit Log -->
+      <div class="mb-md">
+        <h3 class="mb-sm" data-i18n="reports.audit_log">অডিট লগ</h3>
+        <div id="reports-audit-log" class="beneficiary-list"></div>
       </div>
 
       <!-- Data Backup -->
@@ -1407,6 +1433,12 @@ const I18N = {
     'reports.collected_list': { en: 'Collected List', bn: 'সংগৃহীত তালিকা' },
     'reports.no_data':      { en: 'No distribution data yet', bn: 'এখনো কোনো বিতরণ তথ্য নেই' },
     'reports.progress':     { en: 'Progress', bn: 'অগ্রগতি' },
+    'reports.proxies':      { en: 'Proxies', bn: 'প্রক্সি' },
+    'reports.corrections':  { en: 'Corrections', bn: 'সংশোধন' },
+    'reports.audit_log':    { en: 'Audit Log', bn: 'অডিট লগ' },
+    'reports.no_audit':     { en: 'No audit entries yet', bn: 'এখনো কোনো অডিট এন্ট্রি নেই' },
+    'reports.ration_summary': { en: 'Ration Summary', bn: 'রেশন সারসংক্ষেপ' },
+    'reports.total_distributed': { en: 'Total Distributed', bn: 'মোট বিতরণ' },
 
     // Common
     'common.cancel':        { en: 'Cancel', bn: 'বাতিল' },
@@ -1436,6 +1468,18 @@ const I18N = {
     'distribute.phone_hint':   { en: 'Phone ends', bn: 'ফোন শেষ' },
     'distribute.given':        { en: 'Given', bn: 'দেওয়া হয়েছে' },
     'distribute.no_data':      { en: 'Import list in Setup tab first', bn: 'প্রথমে সেটআপ ট্যাবে তালিকা আমদানি করুন' },
+    'distribute.undo':          { en: 'Undo Collection', bn: 'সংগ্রহ পূর্বাবস্থায় ফেরান' },
+    'distribute.undo_reason':   { en: 'Reason for undo', bn: 'পূর্বাবস্থায় ফেরানোর কারণ' },
+    'distribute.undo_mistake':  { en: 'Marked by mistake', bn: 'ভুলে চিহ্নিত' },
+    'distribute.undo_wrong':    { en: 'Wrong person', bn: 'ভুল ব্যক্তি' },
+    'distribute.undo_other':    { en: 'Other', bn: 'অন্যান্য' },
+    'distribute.proxy':         { en: 'Collected by proxy', bn: 'প্রক্সি দ্বারা সংগৃহীত' },
+    'distribute.proxy_name':    { en: 'Proxy name', bn: 'প্রক্সির নাম' },
+    'distribute.rations_label': { en: 'This person should receive:', bn: 'এই ব্যক্তি পাবেন:' },
+    'distribute.group_name':    { en: 'By Name', bn: 'নাম অনুসারে' },
+    'distribute.group_household': { en: 'By Household', bn: 'পরিবার অনুসারে' },
+    'distribute.household_header': { en: 'Household', bn: 'পরিবার' },
+    'distribute.mark_household':  { en: 'Mark all household members?', bn: 'পরিবারের সকল সদস্যকে চিহ্নিত করবেন?' },
 
     // Backup
     'backup.title':            { en: 'Data Backup', bn: 'ডেটা ব্যাকআপ' },
@@ -1449,6 +1493,13 @@ const I18N = {
     // Battery
     'battery.low_hint':        { en: 'Battery low! Use Distribute tab to save power (no camera)', bn: 'ব্যাটারি কম! ক্যামেরা ছাড়াই বিতরণ ট্যাবে যান' },
 
+    // Rations
+    'setup.ration_title':      { en: 'Ration Package', bn: 'রেশন প্যাকেজ' },
+    'setup.ration_empty':      { en: 'No ration items defined. Tap + to add.', bn: 'কোনো রেশন আইটেম নেই। যোগ করতে + ট্যাপ করুন।' },
+    'setup.ration_item':       { en: 'Item (e.g. Rice)', bn: 'আইটেম (যেমন চাল)' },
+    'setup.ration_unit':       { en: 'Unit (kg/L)', bn: 'একক (কেজি/লি)' },
+    'setup.ration_add':        { en: '+ Add Item', bn: '+ আইটেম যোগ করুন' },
+
     // Print
     'print.checklist_title':  { en: 'Beneficiary Checklist', bn: 'সুবিধাভোগী চেকলিস্ট' },
     'print.token_title':      { en: 'Distribution Tokens', bn: 'বিতরণ টোকেন' },
@@ -1456,6 +1507,11 @@ const I18N = {
     'print.page':             { en: 'Page', bn: 'পৃষ্ঠা' },
     'print.col_name':         { en: 'Name', bn: 'নাম' },
     'print.col_phone':        { en: 'Phone', bn: 'ফোন' },
+    'print.col_signature':    { en: 'Signature / Thumbprint', bn: 'স্বাক্ষর / টিপসই' },
+    'print.tear_here':        { en: '✂ Tear Here', bn: '✂ এখানে ছিঁড়ুন' },
+    'print.keep_this':        { en: 'Keep this slip', bn: 'এই স্লিপটি রাখুন' },
+    'print.organizer_stub':   { en: 'Organizer Stub', bn: 'আয়োজক স্টাব' },
+    'print.instructions_v2':  { en: 'Mark with ✓ when food is given. Collect signature or thumbprint.', bn: 'খাবার দেওয়া হলে ✓ চিহ্ন দিন। স্বাক্ষর বা টিপসই নিন।' },
 
     // Help
     'help.title':           { en: 'Quick Guide', bn: 'দ্রুত গাইড' },
@@ -1504,6 +1560,8 @@ const DataManager = {
   KEYS: {
     beneficiaries: 'fd_beneficiaries',
     meta: 'fd_event_meta',
+    audit_log: 'fd_audit_log',
+    ration_def: 'fd_ration_def',
   },
 
   // --- Beneficiaries ---
@@ -1527,9 +1585,14 @@ const DataManager = {
       name: (row.name || '').trim(),
       phone: (row.phone || '').trim(),
       phone_last4: (row.phone || '').trim().slice(-4),
+      household: row.household || '',
+      nid: row.nid || '',
+      photo: row.photo || '',
       collected: false,
       collected_at: null,
-      notes: '',
+      proxy: false,
+      proxy_name: '',
+      notes: row.notes || '',
     }));
     this.saveBeneficiaries(list);
     return list;
@@ -1551,15 +1614,40 @@ const DataManager = {
     );
   },
 
-  markCollected(id) {
+  markCollected(id, options = {}) {
     const list = this.getBeneficiaries();
     const person = list.find(b => b.id === id);
     if (!person) return null;
     if (person.collected) return { alreadyCollected: true, person };
     person.collected = true;
     person.collected_at = new Date().toISOString();
+    if (options.proxy) {
+      person.proxy = true;
+      person.proxy_name = options.proxy_name || '';
+    }
     this.saveBeneficiaries(list);
+    this.appendAuditEntry({ action: 'collect', id, timestamp: person.collected_at });
     return { alreadyCollected: false, person };
+  },
+
+  undoCollection(id, reason) {
+    const list = this.getBeneficiaries();
+    const person = list.find(b => b.id === id);
+    if (!person || !person.collected) return null;
+    const prevTime = person.collected_at;
+    person.collected = false;
+    person.collected_at = null;
+    person.proxy = false;
+    person.proxy_name = '';
+    this.saveBeneficiaries(list);
+    this.appendAuditEntry({
+      action: 'undo',
+      id,
+      reason,
+      prev_collected_at: prevTime,
+      timestamp: new Date().toISOString(),
+    });
+    return person;
   },
 
   addWalkin(name, phone) {
@@ -1570,8 +1658,13 @@ const DataManager = {
       name: name.trim(),
       phone: phone.trim(),
       phone_last4: phone.trim().slice(-4),
+      household: '',
+      nid: '',
+      photo: '',
       collected: false,
       collected_at: null,
+      proxy: false,
+      proxy_name: '',
       notes: 'walk-in',
     };
     list.push(person);
@@ -1584,11 +1677,16 @@ const DataManager = {
     const total = list.length;
     const collected = list.filter(b => b.collected).length;
     const walkins = list.filter(b => b.notes === 'walk-in').length;
+    const proxies = list.filter(b => b.proxy).length;
+    const auditLog = this.getAuditLog();
+    const corrections = auditLog.filter(e => e.action === 'undo').length;
     return {
       total,
       collected,
       remaining: total - collected,
       walkins,
+      proxies,
+      corrections,
       percent: total > 0 ? Math.round((collected / total) * 100) : 0,
     };
   },
@@ -1616,6 +1714,60 @@ const DataManager = {
     return Object.entries(phoneCounts)
       .filter(([, count]) => count > 1)
       .map(([phone, count]) => ({ phone, count }));
+  },
+
+  // --- Household ---
+
+  getHouseholdMembers(householdId) {
+    if (!householdId) return [];
+    return this.getBeneficiaries().filter(b => b.household === householdId);
+  },
+
+  markHouseholdCollected(householdId, options = {}) {
+    const list = this.getBeneficiaries();
+    const members = list.filter(b => b.household === householdId && !b.collected);
+    const now = new Date().toISOString();
+    members.forEach(p => {
+      p.collected = true;
+      p.collected_at = now;
+      if (options.proxy) {
+        p.proxy = true;
+        p.proxy_name = options.proxy_name || '';
+      }
+      this.appendAuditEntry({ action: 'collect', id: p.id, timestamp: now });
+    });
+    this.saveBeneficiaries(list);
+    return members;
+  },
+
+  // --- Audit Log ---
+
+  getAuditLog() {
+    try {
+      return JSON.parse(localStorage.getItem(this.KEYS.audit_log)) || [];
+    } catch {
+      return [];
+    }
+  },
+
+  appendAuditEntry(entry) {
+    const log = this.getAuditLog();
+    log.push(entry);
+    localStorage.setItem(this.KEYS.audit_log, JSON.stringify(log));
+  },
+
+  // --- Ration Definition ---
+
+  getRationDef() {
+    try {
+      return JSON.parse(localStorage.getItem(this.KEYS.ration_def)) || [];
+    } catch {
+      return [];
+    }
+  },
+
+  saveRationDef(items) {
+    localStorage.setItem(this.KEYS.ration_def, JSON.stringify(items));
   },
 
   // --- Event Meta ---
@@ -1649,6 +1801,8 @@ const DataManager = {
   clearAll() {
     localStorage.removeItem(this.KEYS.beneficiaries);
     localStorage.removeItem(this.KEYS.meta);
+    localStorage.removeItem(this.KEYS.audit_log);
+    localStorage.removeItem(this.KEYS.ration_def);
   },
 
   hasData() {
@@ -1670,6 +1824,10 @@ const CSVParser = {
     const headers = this._parseLine(lines[0]).map(h => h.toLowerCase().trim());
     const nameCol = this._findColumn(headers, ['name', 'নাম', 'full_name', 'fullname', 'beneficiary']);
     const phoneCol = this._findColumn(headers, ['phone', 'ফোন', 'mobile', 'phone_number', 'contact', 'tel']);
+    const householdCol = this._findColumn(headers, ['household', 'পরিবার', 'family', 'hh']);
+    const nidCol = this._findColumn(headers, ['nid', 'national_id', 'এনআইডি']);
+    const notesCol = this._findColumn(headers, ['notes', 'নোট', 'comments']);
+    const photoCol = this._findColumn(headers, ['photo', 'image', 'ছবি']);
 
     if (nameCol === -1) {
       return { error: 'CSV must have a "name" column', rows: [] };
@@ -1688,13 +1846,17 @@ const CSVParser = {
       const cols = this._parseLine(line);
       const name = (cols[nameCol] || '').trim();
       const phone = (cols[phoneCol] || '').trim().replace(/[^0-9+]/g, '');
+      const household = householdCol !== -1 ? (cols[householdCol] || '').trim() : '';
+      const nid = nidCol !== -1 ? (cols[nidCol] || '').trim() : '';
+      const notes = notesCol !== -1 ? (cols[notesCol] || '').trim() : '';
+      const photo = photoCol !== -1 ? (cols[photoCol] || '').trim() : '';
 
       if (!name) {
         errors.push(`Row ${i + 1}: missing name`);
         continue;
       }
 
-      rows.push({ name, phone });
+      rows.push({ name, phone, household, nid, notes, photo });
     }
 
     return { error: null, rows, warnings: errors };
@@ -1742,13 +1904,20 @@ const CSVParser = {
   },
 
   exportReport(beneficiaries, meta) {
-    const headers = ['ID', 'Name', 'Phone', 'Collected', 'Collected At', 'Notes'];
+    const headers = [
+      'ID', 'Name', 'Phone', 'Household', 'NID',
+      'Collected', 'Collected At', 'Proxy', 'Proxy Name', 'Notes',
+    ];
     const rows = beneficiaries.map(b => [
       b.id,
       `"${(b.name || '').replace(/"/g, '""')}"`,
       b.phone,
+      b.household || '',
+      b.nid || '',
       b.collected ? 'Yes' : 'No',
       b.collected_at ? new Date(b.collected_at).toLocaleString() : '',
+      b.proxy ? 'Yes' : 'No',
+      b.proxy_name || '',
       b.notes || '',
     ]);
 
@@ -1763,11 +1932,12 @@ const CSVParser = {
 
   exportUncollected(beneficiaries, meta) {
     const uncollected = beneficiaries.filter(b => !b.collected);
-    const headers = ['ID', 'Name', 'Phone'];
+    const headers = ['ID', 'Name', 'Phone', 'Household'];
     const rows = uncollected.map(b => [
       b.id,
       `"${(b.name || '').replace(/"/g, '""')}"`,
       b.phone,
+      b.household || '',
     ]);
 
     let csv = '\uFEFF';
@@ -2321,6 +2491,7 @@ const Search = {
 const Distribute = {
   _debounceTimer: null,
   _allBeneficiaries: [],
+  _groupMode: 'name', // 'name' or 'household'
 
   init() {
     const searchInput = document.getElementById('distribute-search');
@@ -2348,6 +2519,7 @@ const Distribute = {
     this._allBeneficiaries = DataManager.getBeneficiaries();
     this._allBeneficiaries.sort((a, b) => a.name.localeCompare(b.name, 'bn'));
     this._updateCounters();
+    this._renderGroupToggle();
     this._buildAlphabet(this._allBeneficiaries);
     this._renderList(this._allBeneficiaries);
   },
@@ -2400,7 +2572,6 @@ const Distribute = {
     if (!name) return '#';
     const ch = name.charAt(0).toUpperCase();
     if (/[A-Z]/.test(ch)) return ch;
-    // Return the Bengali (or other script) character as-is
     return ch;
   },
 
@@ -2426,6 +2597,50 @@ const Distribute = {
     ).join('');
   },
 
+  // --- Household helpers ---
+
+  _hasHouseholdData() {
+    return this._allBeneficiaries.some(b => b.household && b.household.trim() !== '');
+  },
+
+  _renderGroupToggle() {
+    const container = document.getElementById('distribute-group-toggle');
+    if (!container) return;
+    if (!this._hasHouseholdData()) {
+      container.innerHTML = '';
+      container.classList.add('hidden');
+      return;
+    }
+    container.classList.remove('hidden');
+    const nameActive = this._groupMode === 'name' ? ' btn-primary' : ' btn-ghost';
+    const hhActive = this._groupMode === 'household' ? ' btn-primary' : ' btn-ghost';
+    container.innerHTML =
+      `<button class="btn btn-sm${nameActive}" data-group="name">${I18N.t('distribute.group_name')}</button>` +
+      `<button class="btn btn-sm${hhActive}" data-group="household">${I18N.t('distribute.group_household')}</button>`;
+    container.querySelectorAll('[data-group]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        this._groupMode = e.currentTarget.dataset.group;
+        this._renderGroupToggle();
+        this._buildAlphabet(this._allBeneficiaries);
+        this._renderList(this._allBeneficiaries);
+      });
+    });
+  },
+
+  _groupByHousehold(list) {
+    const groups = {};
+    const noHH = [];
+    list.forEach(b => {
+      const hh = (b.household || '').trim();
+      if (!hh) { noHH.push(b); return; }
+      if (!groups[hh]) groups[hh] = [];
+      groups[hh].push(b);
+    });
+    return { groups, noHH };
+  },
+
+  // --- Render ---
+
   _renderList(list) {
     const container = document.getElementById('distribute-list');
     if (!container) return;
@@ -2439,48 +2654,164 @@ const Distribute = {
       return;
     }
 
+    if (this._groupMode === 'household' && this._hasHouseholdData()) {
+      this._renderHouseholdList(container, list);
+    } else {
+      this._renderNameList(container, list);
+    }
+
+    this._bindGiveButtons();
+    this._bindUndoHandlers();
+  },
+
+  _renderNameList(container, list) {
     const groups = this._groupByLetter(list);
     const letters = Object.keys(groups).sort((a, b) => a.localeCompare(b, 'bn'));
     let html = '';
-
     letters.forEach(letter => {
       html += `<div class="letter-header" data-letter="${this._esc(letter)}">${this._esc(letter)}</div>`;
-      groups[letter].forEach(b => {
-        const isCollected = b.collected;
-        const itemCls = 'distribute-item' + (isCollected ? ' distribute-item-collected' : '');
-        const timeStr = b.collected_at
-          ? new Date(b.collected_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-          : '';
-
-        html += `<div class="${itemCls}" data-id="${b.id}">`;
-        html += `  <div class="distribute-item-info">`;
-        html += `    <div class="distribute-item-name">${this._esc(b.name)}</div>`;
-        html += `    <div class="distribute-item-meta">${b.id} · ${I18N.t('distribute.phone_hint')}: **${b.phone_last4}</div>`;
-        html += `  </div>`;
-
-        if (isCollected) {
-          html += `<span class="badge badge-success">✓ ${I18N.t('distribute.given')} ${timeStr}</span>`;
-        } else {
-          html += `<button class="distribute-give-btn" data-give-id="${b.id}">${I18N.t('distribute.give_food')}</button>`;
-        }
-
-        html += `</div>`;
-      });
+      groups[letter].forEach(b => { html += this._renderItem(b); });
     });
-
     container.innerHTML = html;
-    this._bindGiveButtons();
   },
+
+  _renderHouseholdList(container, list) {
+    const { groups, noHH } = this._groupByHousehold(list);
+    const hhKeys = Object.keys(groups).sort((a, b) => a.localeCompare(b, 'bn'));
+    let html = '';
+    hhKeys.forEach(hh => {
+      const members = groups[hh];
+      html += `<div class="letter-header" data-letter="${this._esc(hh)}">` +
+        `${I18N.t('distribute.household_header')}: ${this._esc(hh)} (${members.length})</div>`;
+      members.sort((a, b) => a.name.localeCompare(b.name, 'bn'));
+      members.forEach(b => { html += this._renderItem(b); });
+    });
+    if (noHH.length) {
+      html += `<div class="letter-header">—</div>`;
+      noHH.sort((a, b) => a.name.localeCompare(b.name, 'bn'));
+      noHH.forEach(b => { html += this._renderItem(b); });
+    }
+    container.innerHTML = html;
+  },
+
+  _renderItem(b) {
+    const isCollected = b.collected;
+    const itemCls = 'distribute-item' + (isCollected ? ' distribute-item-collected' : '');
+    const timeStr = b.collected_at
+      ? new Date(b.collected_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      : '';
+    const proxyTag = (isCollected && b.proxy)
+      ? ` <span class="distribute-proxy-tag">(${I18N.t('distribute.proxy')})</span>`
+      : '';
+
+    let html = `<div class="${itemCls}" data-id="${b.id}">`;
+    html += `  <div class="distribute-item-info">`;
+    html += `    <div class="distribute-item-name">${this._esc(b.name)}</div>`;
+    html += `    <div class="distribute-item-meta">${b.id} · ${I18N.t('distribute.phone_hint')}: **${b.phone_last4}</div>`;
+    html += `  </div>`;
+
+    if (isCollected) {
+      html += `<span class="badge badge-success" data-undo-id="${b.id}" style="cursor:pointer;">` +
+        `✓ ${I18N.t('distribute.given')} ${timeStr}${proxyTag}</span>`;
+    } else {
+      html += `<button class="distribute-give-btn" data-give-id="${b.id}">${I18N.t('distribute.give_food')}</button>`;
+    }
+
+    html += `</div>`;
+    return html;
+  },
+
+  // --- Button bindings ---
 
   _bindGiveButtons() {
     document.querySelectorAll('[data-give-id]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = e.currentTarget.dataset.giveId;
-        this._showConfirmation(id);
+        this._showConfirmation(e.currentTarget.dataset.giveId);
       });
     });
   },
+
+  _bindUndoHandlers() {
+    document.querySelectorAll('[data-undo-id]').forEach(badge => {
+      badge.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this._showUndoModal(e.currentTarget.dataset.undoId);
+      });
+    });
+  },
+
+  // --- Undo modal ---
+
+  _showUndoModal(id) {
+    const person = DataManager.findById(id);
+    if (!person || !person.collected) return;
+
+    const timeStr = person.collected_at
+      ? new Date(person.collected_at).toLocaleString()
+      : '';
+
+    const bodyHtml = `
+      <div style="text-align:center;padding:8px 0;">
+        <div style="font-size:1.25rem;font-weight:700;margin-bottom:8px;">${this._esc(person.name)}</div>
+        <div style="color:var(--text-muted);margin-bottom:12px;">${I18N.t('scan.collected_at')}: ${timeStr}</div>
+        <label style="display:block;text-align:left;margin-bottom:4px;font-weight:600;">
+          ${I18N.t('distribute.undo_reason')}
+        </label>
+        <select id="undo-reason-select" style="width:100%;padding:10px;font-size:1rem;border-radius:8px;border:1px solid #ccc;">
+          <option value="mistake">${I18N.t('distribute.undo_mistake')}</option>
+          <option value="wrong_person">${I18N.t('distribute.undo_wrong')}</option>
+          <option value="other">${I18N.t('distribute.undo_other')}</option>
+        </select>
+      </div>`;
+
+    UI.showModal(
+      I18N.t('distribute.undo'),
+      bodyHtml,
+      [
+        { label: I18N.t('common.cancel'), cls: 'btn-ghost', onClick: () => UI.closeModal() },
+        {
+          label: I18N.t('distribute.undo'),
+          cls: 'btn-danger',
+          onClick: () => {
+            const sel = document.getElementById('undo-reason-select');
+            const reason = sel ? sel.value : 'other';
+            UI.closeModal();
+            this._confirmUndo(id, reason);
+          }
+        }
+      ]
+    );
+  },
+
+  _confirmUndo(id, reason) {
+    const person = DataManager.undoCollection(id, reason);
+    if (!person) return;
+
+    UI.toastSuccess(I18N.t('distribute.undo') + ': ' + person.name);
+    this._refreshDataAndCounters();
+    this._updateItemInPlaceUndo(id, person);
+  },
+
+  _updateItemInPlaceUndo(id, person) {
+    const item = document.querySelector(`.distribute-item[data-id="${id}"]`);
+    if (!item) return;
+    item.classList.remove('distribute-item-collected');
+    const badge = item.querySelector('[data-undo-id]');
+    if (badge) {
+      const btn = document.createElement('button');
+      btn.className = 'distribute-give-btn';
+      btn.dataset.giveId = id;
+      btn.textContent = I18N.t('distribute.give_food');
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this._showConfirmation(id);
+      });
+      badge.replaceWith(btn);
+    }
+  },
+
+  // --- Confirmation modal ---
 
   _showConfirmation(id) {
     const person = DataManager.findById(id);
@@ -2491,37 +2822,75 @@ const Distribute = {
       return;
     }
 
+    let rationHtml = '';
+    const rations = DataManager.getRationDef();
+    if (rations && rations.length) {
+      rationHtml = `<div style="text-align:left;margin-top:12px;padding:10px;background:#f0f7f0;border-radius:8px;">` +
+        `<div style="font-weight:600;margin-bottom:6px;">${I18N.t('distribute.rations_label')}</div><ul style="margin:0;padding-left:20px;">`;
+      rations.forEach(r => {
+        rationHtml += `<li>${this._esc(r.name || r.item)}: ${this._esc(String(r.qty || r.amount || ''))} ${this._esc(r.unit || '')}</li>`;
+      });
+      rationHtml += `</ul></div>`;
+    }
+
+    const proxyId = 'proxy-check-' + id;
+    const proxyNameId = 'proxy-name-' + id;
+
     const bodyHtml = `
       <div style="text-align:center;padding:8px 0;">
         <div style="font-size:1.25rem;font-weight:700;margin-bottom:8px;">${this._esc(person.name)}</div>
         <div style="color:var(--text-muted);margin-bottom:4px;">ID: ${person.id}</div>
         <div style="color:var(--text-muted);">${I18N.t('distribute.phone_hint')}: **${person.phone_last4}</div>
-      </div>
-    `;
+        ${rationHtml}
+        <div style="text-align:left;margin-top:12px;padding-top:10px;border-top:1px solid #eee;">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <input type="checkbox" id="${proxyId}" style="width:20px;height:20px;">
+            <span>${I18N.t('distribute.proxy')}</span>
+          </label>
+          <div id="${proxyNameId}-wrap" style="display:none;margin-top:8px;">
+            <input type="text" id="${proxyNameId}" placeholder="${I18N.t('distribute.proxy_name')}"
+              style="width:100%;padding:10px;font-size:1rem;border-radius:8px;border:1px solid #ccc;box-sizing:border-box;">
+          </div>
+        </div>
+      </div>`;
 
-    UI.showModal(
+    const modal = UI.showModal(
       I18N.t('distribute.confirm_give'),
       bodyHtml,
       [
-        {
-          label: I18N.t('common.cancel'),
-          cls: 'btn-ghost',
-          onClick: () => UI.closeModal()
-        },
+        { label: I18N.t('common.cancel'), cls: 'btn-ghost', onClick: () => UI.closeModal() },
         {
           label: I18N.t('distribute.give_food'),
           cls: 'btn-success',
           onClick: () => {
+            const chk = document.getElementById(proxyId);
+            const nameInput = document.getElementById(proxyNameId);
+            const isProxy = chk && chk.checked;
+            const proxyName = nameInput ? nameInput.value.trim() : '';
             UI.closeModal();
-            this._confirmGive(id);
+            this._confirmGive(id, { proxy: isProxy, proxy_name: proxyName });
           }
         }
       ]
     );
+
+    // Bind proxy checkbox toggle
+    setTimeout(() => {
+      const chk = document.getElementById(proxyId);
+      const wrap = document.getElementById(proxyNameId + '-wrap');
+      if (chk && wrap) {
+        chk.addEventListener('change', () => {
+          wrap.style.display = chk.checked ? 'block' : 'none';
+        });
+      }
+    }, 50);
   },
 
-  _confirmGive(id) {
-    const result = DataManager.markCollected(id);
+  _confirmGive(id, options) {
+    const proxyOpts = (options && options.proxy)
+      ? { proxy: true, proxy_name: options.proxy_name || '' }
+      : {};
+    const result = DataManager.markCollected(id, proxyOpts);
     if (!result) {
       UI.toastError('Person not found');
       return;
@@ -2532,14 +2901,47 @@ const Distribute = {
     }
 
     UI.toastSuccess('✓ ' + result.person.name);
-    this._allBeneficiaries = DataManager.getBeneficiaries();
-    this._allBeneficiaries.sort((a, b) => a.name.localeCompare(b.name, 'bn'));
-    this._updateCounters();
-    Stats.update();
-
-    // Update the single item in-place instead of full re-render
+    this._refreshDataAndCounters();
     this._updateItemInPlace(id, result.person);
+
+    // If household mode, ask about marking household
+    this._maybeAskHousehold(id, proxyOpts);
   },
+
+  _maybeAskHousehold(id, proxyOpts) {
+    if (this._groupMode !== 'household') return;
+    const person = DataManager.findById(id);
+    if (!person || !person.household) return;
+    const members = DataManager.getHouseholdMembers(person.household);
+    const uncollected = members.filter(m => !m.collected && m.id !== id);
+    if (!uncollected.length) return;
+
+    UI.showModal(
+      I18N.t('distribute.mark_household'),
+      `<p style="text-align:center;">${I18N.t('distribute.household_header')}: ${this._esc(person.household)}<br>(${uncollected.length} ${I18N.t('scan.remaining')})</p>`,
+      [
+        { label: I18N.t('common.no'), cls: 'btn-ghost', onClick: () => UI.closeModal() },
+        {
+          label: I18N.t('common.yes'),
+          cls: 'btn-success',
+          onClick: () => {
+            UI.closeModal();
+            this._markHousehold(person.household, proxyOpts);
+          }
+        }
+      ]
+    );
+  },
+
+  _markHousehold(householdId, proxyOpts) {
+    const marked = DataManager.markHouseholdCollected(householdId, proxyOpts);
+    if (!marked || !marked.length) return;
+    this._refreshDataAndCounters();
+    marked.forEach(p => this._updateItemInPlace(p.id, p));
+    UI.toastSuccess('✓ ' + marked.length + ' ' + I18N.t('distribute.household_header'));
+  },
+
+  // --- In-place updates ---
 
   _updateItemInPlace(id, person) {
     const item = document.querySelector(`.distribute-item[data-id="${id}"]`);
@@ -2549,14 +2951,30 @@ const Distribute = {
     const timeStr = person.collected_at
       ? new Date(person.collected_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       : '';
+    const proxyTag = person.proxy
+      ? ` <span class="distribute-proxy-tag">(${I18N.t('distribute.proxy')})</span>`
+      : '';
 
     const btn = item.querySelector('[data-give-id]');
     if (btn) {
       const badge = document.createElement('span');
       badge.className = 'badge badge-success';
-      badge.textContent = '✓ ' + I18N.t('distribute.given') + ' ' + timeStr;
+      badge.dataset.undoId = id;
+      badge.style.cursor = 'pointer';
+      badge.innerHTML = '✓ ' + I18N.t('distribute.given') + ' ' + timeStr + proxyTag;
+      badge.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this._showUndoModal(id);
+      });
       btn.replaceWith(badge);
     }
+  },
+
+  _refreshDataAndCounters() {
+    this._allBeneficiaries = DataManager.getBeneficiaries();
+    this._allBeneficiaries.sort((a, b) => a.name.localeCompare(b.name, 'bn'));
+    this._updateCounters();
+    if (typeof Stats !== 'undefined' && Stats.update) Stats.update();
   },
 
   _esc(str) {
@@ -2599,6 +3017,7 @@ const PrintGenerator = {
             <th class="name-col">${I18N.t('print.col_name') || 'Name'}</th>
             <th class="id-col">ID</th>
             <th class="phone-col">${I18N.t('print.col_phone') || 'Phone'}</th>
+            <th class="sig-col">${I18N.t('print.col_signature')}</th>
           </tr></thead><tbody>`;
       }
 
@@ -2609,6 +3028,7 @@ const PrintGenerator = {
         <td class="name-col">${this._esc(b.name)}</td>
         <td class="id-col">${b.id}</td>
         <td class="phone-col">**${b.phone_last4}</td>
+        <td class="sig-col"></td>
       </tr>`;
     }
 
@@ -2625,12 +3045,12 @@ const PrintGenerator = {
     this._openOrDownload(html, 'checklist.html');
   },
 
-  // --- Token Slips ---
+  // --- Token Slips (Two-Part Tear-off) ---
 
   generateTokenSlips(beneficiaries, meta) {
     const eventLabel = meta?.event_name || 'Food Distribution';
     const sorted = [...beneficiaries].sort((a, b) => a.name.localeCompare(b.name));
-    const slipsPerPage = 20; // 4 cols × 5 rows
+    const slipsPerPage = 10; // 2 cols × 5 rows
 
     let html = this._tokenHeader(eventLabel);
 
@@ -2644,10 +3064,23 @@ const PrintGenerator = {
       }
 
       const b = sorted[i];
-      html += `<div class="token-slip">
-        <div class="token-id">${b.id}</div>
-        <div class="token-name">${this._esc(b.name)}</div>
-        <div class="token-event">${this._esc(eventLabel)}</div>
+      const tearText = I18N.t('print.tear_here');
+      const keepText = I18N.t('print.keep_this');
+      const stubText = I18N.t('print.organizer_stub');
+
+      html += `<div class="token-cell">
+        <div class="token-top">
+          <div class="token-id">${b.id}</div>
+          <div class="token-name">${this._esc(b.name)}</div>
+          <div class="token-event">${this._esc(eventLabel)}</div>
+          <div class="token-keep">${this._esc(keepText)}</div>
+        </div>
+        <div class="token-perforation">${this._esc(tearText)}</div>
+        <div class="token-bottom">
+          <div class="token-id token-id-small">${b.id}</div>
+          <div class="token-name-small">${this._esc(b.name)}</div>
+          <div class="token-stub-label">${this._esc(stubText)}</div>
+        </div>
       </div>`;
     }
 
@@ -2736,11 +3169,12 @@ const PrintGenerator = {
   .checklist-table th {
     background: #e0e0e0; font-weight: 700; font-size: 11pt;
   }
-  .chk-col { width: 10mm; text-align: center; font-size: 14pt; }
-  .num-col { width: 10mm; text-align: center; }
+  .chk-col { width: 8mm; text-align: center; font-size: 14pt; }
+  .num-col { width: 8mm; text-align: center; }
   .name-col { font-size: 14pt; font-weight: 600; }
-  .id-col { width: 22mm; font-family: monospace; font-size: 10pt; }
-  .phone-col { width: 18mm; font-size: 10pt; }
+  .id-col { width: 18mm; font-family: monospace; font-size: 10pt; }
+  .phone-col { width: 16mm; font-size: 10pt; }
+  .sig-col { width: 30mm; }
   @media print {
     .no-print { display: none; }
     body { margin: 0; }
@@ -2769,7 +3203,7 @@ const PrintGenerator = {
     </div>`;
 
     if (isFirst) {
-      const instructions = I18N.t('print.instructions');
+      const instructions = I18N.t('print.instructions_v2');
       html += `<div class="instructions">${this._esc(instructions)}</div>`;
     }
 
@@ -2803,27 +3237,53 @@ const PrintGenerator = {
   .token-page:last-of-type { page-break-after: auto; }
   .token-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(5, 1fr);
     gap: 0;
     width: 100%;
     min-height: 277mm; /* A4 minus padding */
   }
-  .token-slip {
+  .token-cell {
     border: 1px dashed #666;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .token-top {
+    flex: 3;
     padding: 4mm;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    overflow: hidden;
+  }
+  .token-perforation {
+    border-top: 2px dashed #000;
+    text-align: center;
+    font-size: 8pt;
+    color: #555;
+    padding: 1mm 0;
+    letter-spacing: 2px;
+  }
+  .token-bottom {
+    flex: 2;
+    padding: 3mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #f9f9f9;
   }
   .token-id {
     font-size: 18pt;
     font-weight: 700;
     font-family: monospace;
     margin-bottom: 2mm;
+  }
+  .token-id-small {
+    font-size: 14pt;
   }
   .token-name {
     font-size: 12pt;
@@ -2832,11 +3292,30 @@ const PrintGenerator = {
     word-wrap: break-word;
     max-width: 100%;
   }
+  .token-name-small {
+    font-size: 9pt;
+    font-weight: 500;
+    line-height: 1.2;
+    word-wrap: break-word;
+    max-width: 100%;
+    color: #333;
+  }
   .token-event {
-    font-size: 8pt;
+    font-size: 9pt;
     color: #555;
-    margin-top: auto;
-    padding-top: 2mm;
+    margin-top: 2mm;
+  }
+  .token-keep {
+    font-size: 8pt;
+    color: #777;
+    margin-top: 2mm;
+    font-style: italic;
+  }
+  .token-stub-label {
+    font-size: 7pt;
+    color: #777;
+    margin-top: 1mm;
+    font-style: italic;
   }
   @media print {
     .no-print { display: none; }
@@ -2870,6 +3349,8 @@ const Backup = {
       exported_at: new Date().toISOString(),
       meta: meta,
       beneficiaries: DataManager.getBeneficiaries(),
+      audit_log: DataManager.getAuditLog(),
+      ration_def: DataManager.getRationDef(),
       lang: I18N.getLang(),
     };
 
@@ -2896,6 +3377,13 @@ const Backup = {
       DataManager.saveMeta(data.meta);
     }
     DataManager.saveBeneficiaries(data.beneficiaries);
+
+    if (Array.isArray(data.audit_log)) {
+      localStorage.setItem(DataManager.KEYS.audit_log, JSON.stringify(data.audit_log));
+    }
+    if (Array.isArray(data.ration_def)) {
+      DataManager.saveRationDef(data.ration_def);
+    }
 
     if (data.lang) {
       I18N.setLang(data.lang);
@@ -2956,6 +3444,99 @@ const Backup = {
   },
 };
 /* ============================================
+   RATION SETUP — Ration Definition Form
+   ============================================ */
+
+const RationSetup = {
+  init() {
+    const addBtn = document.getElementById('btn-add-ration-item');
+    if (addBtn) addBtn.addEventListener('click', () => this._addItem());
+  },
+
+  refresh() {
+    this._render();
+  },
+
+  _render() {
+    const container = document.getElementById('ration-items-list');
+    if (!container) return;
+    const items = DataManager.getRationDef();
+
+    if (!items.length) {
+      container.innerHTML = '<div class="text-muted" style="padding:8px 0;">' +
+        I18N.t('setup.ration_empty') + '</div>';
+      return;
+    }
+
+    container.innerHTML = items.map((item, i) => `
+      <div class="ration-row" style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+        <input class="input" type="text" value="${this._esc(item.item)}"
+          data-ration-idx="${i}" data-ration-field="item"
+          placeholder="${I18N.t('setup.ration_item')}" style="flex:2;">
+        <input class="input" type="number" value="${item.quantity}"
+          data-ration-idx="${i}" data-ration-field="quantity"
+          placeholder="0" style="flex:1;width:60px;">
+        <input class="input" type="text" value="${this._esc(item.unit)}"
+          data-ration-idx="${i}" data-ration-field="unit"
+          placeholder="${I18N.t('setup.ration_unit')}" style="flex:1;width:60px;">
+        <button class="btn btn-ghost btn-sm text-danger"
+          data-remove-ration="${i}" style="padding:4px 8px;">✕</button>
+      </div>
+    `).join('');
+
+    this._bindInputs();
+  },
+
+  _bindInputs() {
+    document.querySelectorAll('[data-ration-idx]').forEach(input => {
+      input.addEventListener('change', () => this._saveFromDOM());
+    });
+    document.querySelectorAll('[data-remove-ration]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const idx = parseInt(e.currentTarget.dataset.removeRation);
+        this._removeItem(idx);
+      });
+    });
+  },
+
+  _saveFromDOM() {
+    const items = [];
+    document.querySelectorAll('.ration-row').forEach(row => {
+      const itemInput = row.querySelector('[data-ration-field="item"]');
+      const qtyInput = row.querySelector('[data-ration-field="quantity"]');
+      const unitInput = row.querySelector('[data-ration-field="unit"]');
+      if (itemInput && qtyInput && unitInput) {
+        items.push({
+          item: itemInput.value.trim(),
+          quantity: qtyInput.value.trim(),
+          unit: unitInput.value.trim(),
+        });
+      }
+    });
+    DataManager.saveRationDef(items);
+  },
+
+  _addItem() {
+    const items = DataManager.getRationDef();
+    items.push({ item: '', quantity: '', unit: 'kg' });
+    DataManager.saveRationDef(items);
+    this._render();
+  },
+
+  _removeItem(idx) {
+    const items = DataManager.getRationDef();
+    items.splice(idx, 1);
+    DataManager.saveRationDef(items);
+    this._render();
+  },
+
+  _esc(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  },
+};
+/* ============================================
    STATS — Dashboard Counters + Progress
    ============================================ */
 
@@ -2967,11 +3548,19 @@ const Stats = {
     this._updateCounter('stat-collected', stats.collected);
     this._updateCounter('stat-remaining', stats.remaining);
     this._updateCounter('stat-walkins', stats.walkins);
+    this._updateCounter('stat-proxies', stats.proxies);
+    this._updateCounter('stat-corrections', stats.corrections);
 
-    // Progress bar
+    // Progress bar (scan panel)
     const progressFill = document.getElementById('progress-fill');
     if (progressFill) {
       progressFill.style.width = stats.percent + '%';
+    }
+
+    // Progress bar (reports panel)
+    const reportsProgressFill = document.getElementById('reports-progress-fill');
+    if (reportsProgressFill) {
+      reportsProgressFill.style.width = stats.percent + '%';
     }
 
     // Progress text
@@ -2998,6 +3587,79 @@ const Stats = {
     if (el) el.textContent = value;
   },
 
+  renderRationSummary() {
+    const container = document.getElementById('reports-ration-summary');
+    if (!container) return;
+
+    const ration = DataManager.getRationDef();
+    if (!ration || ration.length === 0) {
+      container.innerHTML = '';
+      return;
+    }
+
+    const stats = DataManager.getStats();
+    const collected = stats.collected;
+
+    let html = '<div class="card">';
+    html += '<h3 data-i18n="reports.ration_summary">' + I18N.t('reports.ration_summary') + '</h3>';
+    html += '<p class="text-muted mt-sm">' + I18N.t('reports.total_distributed') + ':</p>';
+    html += '<ul class="mt-sm" style="list-style:disc;padding-left:var(--space-lg);">';
+
+    ration.forEach(function(r) {
+      const qty = parseFloat(r.quantity) || 0;
+      const total = qty * collected;
+      const unit = r.unit || '';
+      const perPerson = qty + ' ' + unit;
+      html += '<li style="margin-bottom:var(--space-xs);">';
+      html += '<strong>' + (r.item || '—') + '</strong>: ';
+      html += total + ' ' + unit;
+      html += ' <span class="text-muted">(' + collected + ' × ' + perPerson + ')</span>';
+      html += '</li>';
+    });
+
+    html += '</ul></div>';
+    container.innerHTML = html;
+  },
+
+  renderAuditLog() {
+    const container = document.getElementById('reports-audit-log');
+    if (!container) return;
+
+    const log = DataManager.getAuditLog();
+    if (!log || log.length === 0) {
+      container.innerHTML = '<div class="empty-state"><div class="empty-state-text">'
+        + I18N.t('reports.no_audit') + '</div></div>';
+      return;
+    }
+
+    // Show last 50 entries, most recent first
+    const recent = log.slice(-50).reverse();
+    let html = '';
+
+    recent.forEach(function(entry) {
+      const time = entry.timestamp
+        ? new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        : '—';
+      const date = entry.timestamp
+        ? new Date(entry.timestamp).toLocaleDateString()
+        : '';
+      const actionLabel = entry.action === 'undo' ? '↩ Undo' : '✅ Collect';
+      const actionClass = entry.action === 'undo' ? 'text-warning' : 'text-success';
+      const reason = entry.reason ? ' — ' + entry.reason : '';
+
+      html += '<div class="beneficiary-row" style="padding:var(--space-sm) var(--space-md);">';
+      html += '<div>';
+      html += '<span class="' + actionClass + ' font-bold">' + actionLabel + '</span> ';
+      html += '<strong>' + (entry.id || '—') + '</strong>';
+      if (reason) html += '<span class="text-muted">' + reason + '</span>';
+      html += '</div>';
+      html += '<div class="text-muted" style="font-size:0.85em;">' + date + ' ' + time + '</div>';
+      html += '</div>';
+    });
+
+    container.innerHTML = html;
+  },
+
   renderReportsList() {
     const collectedList = DataManager.getCollectedList();
     UI.renderBeneficiaryList('reports-collected-list', collectedList, {
@@ -3010,6 +3672,9 @@ const Stats = {
       emptyTitle: I18N.t('reports.no_data'),
       maxItems: 200,
     });
+
+    this.renderRationSummary();
+    this.renderAuditLog();
   },
 };
 /* ============================================
@@ -3024,6 +3689,7 @@ const App = {
     UI.init();
     Search.init();
     Distribute.init();
+    RationSetup.init();
     this._bindNavigation();
     this._bindSetupActions();
     this._bindScanActions();
@@ -3215,6 +3881,8 @@ const App = {
       UI.hide('#setup-data-loaded');
       UI.show('#setup-no-data');
     }
+
+    RationSetup.refresh();
   },
 
   _generateChecklist() {

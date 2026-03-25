@@ -12,6 +12,8 @@ const Backup = {
       exported_at: new Date().toISOString(),
       meta: meta,
       beneficiaries: DataManager.getBeneficiaries(),
+      audit_log: DataManager.getAuditLog(),
+      ration_def: DataManager.getRationDef(),
       lang: I18N.getLang(),
     };
 
@@ -38,6 +40,13 @@ const Backup = {
       DataManager.saveMeta(data.meta);
     }
     DataManager.saveBeneficiaries(data.beneficiaries);
+
+    if (Array.isArray(data.audit_log)) {
+      localStorage.setItem(DataManager.KEYS.audit_log, JSON.stringify(data.audit_log));
+    }
+    if (Array.isArray(data.ration_def)) {
+      DataManager.saveRationDef(data.ration_def);
+    }
 
     if (data.lang) {
       I18N.setLang(data.lang);

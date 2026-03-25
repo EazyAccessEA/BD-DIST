@@ -10,6 +10,7 @@ const App = {
     UI.init();
     Search.init();
     Distribute.init();
+    RationSetup.init();
     this._bindNavigation();
     this._bindSetupActions();
     this._bindScanActions();
@@ -201,6 +202,8 @@ const App = {
       UI.hide('#setup-data-loaded');
       UI.show('#setup-no-data');
     }
+
+    RationSetup.refresh();
   },
 
   _generateChecklist() {
