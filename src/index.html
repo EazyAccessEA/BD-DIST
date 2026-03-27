@@ -143,10 +143,11 @@
           <div class="text-muted mt-sm" id="distribute-progress-text">0 / 0 (0%)</div>
         </div>
 
-        <!-- Search -->
-        <div class="mb-md">
+        <!-- Search + Group Toggle -->
+        <div class="mb-md" style="display:flex;gap:var(--space-sm);align-items:center;">
           <input class="input input-search" type="text" id="distribute-search"
-            data-i18n-placeholder="distribute.search" placeholder="নাম বা ID খুঁজুন..." autocomplete="off">
+            data-i18n-placeholder="distribute.search" placeholder="নাম বা ID খুঁজুন..." autocomplete="off" style="flex:1;">
+          <div id="distribute-group-toggle" class="hidden" style="display:flex;gap:4px;flex-shrink:0;"></div>
         </div>
 
         <!-- Distribution List + Alphabet Index -->
